@@ -1,0 +1,93 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 005-create-role-permissions
+      author: identity-service
+
+      changes:
+
+        - createTable:
+            schemaName: identity_schema
+            tableName: role_permissions
+
+            columns:
+
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_role_permissions
+
+              - column:
+                  name: role_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: permission_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_by
+                  type: UUID
+
+              - column:
+                  name: updated_by
+                  type: UUID
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+
+        - addUniqueConstraint:
+            schemaName: identity_schema
+            tableName: role_permissions
+            columnNames: role_id, permission_id
+            constraintName: uq_role_permissions_role_permission
+
+
+        - addForeignKeyConstraint:
+            baseTableSchemaName: identity_schema
+            baseTableName: role_permissions
+            baseColumnNames: role_id
+            referencedTableSchemaName: identity_schema
+            referencedTableName: roles
+            referencedColumnNames: id
+            constraintName: fk_role_permissions_role
+
+
+        - addForeignKeyConstraint:
+            baseTableSchemaName: identity_schema
+            baseTableName: role_permissions
+            baseColumnNames: permission_id
+            referencedTableSchemaName: identity_schema
+            referencedTableName: permissions
+            referencedColumnNames: id
+            constraintName: fk_role_permissions_permission
+
+
+        - createIndex:
+            schemaName: identity_schema
+            tableName: role_permissions
+            indexName: ix_role_permissions_permission_id
+
+            columns:
+              - column:
+                  name: permission_id

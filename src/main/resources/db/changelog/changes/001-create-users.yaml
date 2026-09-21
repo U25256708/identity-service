@@ -1,0 +1,161 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-users
+      author: identity-service
+
+      changes:
+
+        - createTable:
+            schemaName: identity_schema
+            tableName: users
+
+            columns:
+
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_users
+
+              - column:
+                  name: user_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: username
+                  type: VARCHAR(100)
+
+              - column:
+                  name: password_hash
+                  type: VARCHAR(255)
+
+              - column:
+                  name: first_name
+                  type: VARCHAR(100)
+
+              - column:
+                  name: paternal_last_name
+                  type: VARCHAR(100)
+
+              - column:
+                  name: maternal_last_name
+                  type: VARCHAR(100)
+
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: phone_number
+                  type: VARCHAR(20)
+
+              - column:
+                  name: dni
+                  type: VARCHAR(8)
+
+              - column:
+                  name: employee_code
+                  type: VARCHAR(9)
+
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: last_login_at
+                  type: TIMESTAMPTZ
+
+              - column:
+                  name: token_version
+                  type: INTEGER
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_by
+                  type: UUID
+
+              - column:
+                  name: updated_by
+                  type: UUID
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+
+        - sql:
+            sql: |
+              ALTER TABLE identity_schema.users
+              ADD CONSTRAINT ck_users_type
+              CHECK (user_type IN ('INTERNAL', 'CUSTOMER'));
+
+              ALTER TABLE identity_schema.users
+              ADD CONSTRAINT ck_users_email_not_blank
+              CHECK (BTRIM(email) <> '');
+
+              ALTER TABLE identity_schema.users
+              ADD CONSTRAINT ck_users_token_version
+              CHECK (token_version >= 1);
+
+              ALTER TABLE identity_schema.users
+              ADD CONSTRAINT ck_users_internal_or_customer
+              CHECK (
+                  (
+                      user_type = 'INTERNAL'
+                      AND NULLIF(BTRIM(username), '') IS NOT NULL
+                      AND NULLIF(BTRIM(password_hash), '') IS NOT NULL
+                      AND NULLIF(BTRIM(first_name), '') IS NOT NULL
+                      AND NULLIF(BTRIM(paternal_last_name), '') IS NOT NULL
+                      AND NULLIF(BTRIM(maternal_last_name), '') IS NOT NULL
+                      AND NULLIF(BTRIM(phone_number), '') IS NOT NULL
+                      AND dni IS NOT NULL
+                      AND dni ~ '^[0-9]{8}$'
+                  )
+                  OR
+                  (
+                      user_type = 'CUSTOMER'
+                      AND username IS NULL
+                      AND password_hash IS NULL
+                      AND first_name IS NULL
+                      AND paternal_last_name IS NULL
+                      AND maternal_last_name IS NULL
+                      AND phone_number IS NULL
+                      AND dni IS NULL
+                  )
+              );
+
+
+        - sql:
+            sql: |
+              CREATE UNIQUE INDEX uq_users_username_ci
+              ON identity_schema.users (LOWER(username))
+              WHERE username IS NOT NULL;
+
+              CREATE UNIQUE INDEX uq_users_email_ci
+              ON identity_schema.users (LOWER(email));
+
+              CREATE UNIQUE INDEX uq_users_dni
+              ON identity_schema.users (dni)
+              WHERE dni IS NOT NULL;
