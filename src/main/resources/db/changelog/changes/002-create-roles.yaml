@@ -1,0 +1,74 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 002-create-roles
+      author: identity-service
+
+      changes:
+
+        - createTable:
+            schemaName: identity_schema
+            tableName: roles
+
+            columns:
+
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_roles
+
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_by
+                  type: UUID
+
+              - column:
+                  name: updated_by
+                  type: UUID
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+
+        - sql:
+            sql: |
+              ALTER TABLE identity_schema.roles
+              ADD CONSTRAINT ck_roles_name_not_blank
+              CHECK (BTRIM(name) <> '');
+
+
+        - sql:
+            sql: |
+              CREATE UNIQUE INDEX uq_roles_name_ci
+              ON identity_schema.roles (LOWER(name));
