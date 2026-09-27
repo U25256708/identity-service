@@ -40,7 +40,7 @@ public class OtpCredentials extends AbstractAuditable<UUID> {
     }
 
     public boolean isExpired() {
-        return !validUntil.isBefore(Instant.now());
+        return validUntil.isBefore(Instant.now());
     }
 
     public void registerFailedAttempt() {

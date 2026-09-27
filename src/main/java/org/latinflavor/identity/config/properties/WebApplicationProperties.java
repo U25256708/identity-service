@@ -51,8 +51,6 @@ public class WebApplicationProperties {
 
         private List<String> unauthenticatedPaths = new ArrayList<>();
 
-        private List<String> authenticatedPaths = new ArrayList<>();
-
         private List<PathAuthorizationRule> authorizationRules = new ArrayList<>();
 
         public RequestMatcher matcherFor(List<String> paths) {
@@ -61,10 +59,6 @@ public class WebApplicationProperties {
 
         public RequestMatcher unauthenticatedMatchers() {
             return buildMatcher(unauthenticatedPaths);
-        }
-
-        public RequestMatcher authenticatedMatchers() {
-            return buildMatcher(authenticatedPaths);
         }
 
         private RequestMatcher buildMatcher(List<String> paths) {

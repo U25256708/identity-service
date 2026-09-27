@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum OtpErrors implements ApplicationError {
 
-    INVALID_OTP_CODE(HttpStatus.BAD_REQUEST, "An error while creating customer with name %s"),
+    INVALID_OTP_CODE(HttpStatus.BAD_REQUEST, "Invalid OTP code"),
     EXPIRED_OTP_CODE(HttpStatus.BAD_REQUEST, "This OTP code has expired");
 
     private final HttpStatus httpStatus;

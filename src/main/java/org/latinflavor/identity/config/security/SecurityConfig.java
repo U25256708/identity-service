@@ -92,9 +92,7 @@ public class SecurityConfig {
                     .requestMatchers(rule.getMethod(), rule.getPath())
                     .access(authorityManager(rule));
         }
-        authorization
-                .requestMatchers(webSecurityProperties.authenticatedMatchers()).authenticated()
-                .anyRequest().denyAll();
+        authorization.anyRequest().denyAll();
     }
 
     private AuthorizationManager<RequestAuthorizationContext> authorityManager(
