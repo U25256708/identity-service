@@ -1,12 +1,6 @@
 package org.latinflavor.identity.adapter.rest.response;
 
-public record SignInResponse(
-        String accessToken,
-        String refreshToken,
-        long expiresIn,
-        String type
-) {
-    public SignInResponse(String accessToken, String refreshToken, long expiresIn) {
-        this(accessToken, refreshToken, expiresIn, "Bearer");
-    }
+import java.util.Set;
+
+public record SignInResponse(String accessToken, long expiresIn, Set<String> permissions) {
 }

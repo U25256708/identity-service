@@ -13,7 +13,10 @@ import java.util.Optional;
 @EnableTransactionManagement
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 @EnableJpaRepositories(basePackages = {
-        "org.latinflavor.identity.adapter.persistence.user"
+        "org.latinflavor.identity.adapter.persistence.user",
+        "org.latinflavor.identity.adapter.persistence.otp",
+        "org.latinflavor.identity.adapter.persistence.permission",
+        "org.latinflavor.identity.adapter.persistence.role",
 }
 )
 public class JpaConfig {

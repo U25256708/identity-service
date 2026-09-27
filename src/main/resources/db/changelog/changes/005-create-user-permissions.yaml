@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-create-user-permissions
+      author: identity-service
+      changes:
+        - createTable:
+            schemaName: identity_schema
+            tableName: user_permissions
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_user_permissions
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permission_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: VARCHAR(36)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(36)
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - addUniqueConstraint:
+            schemaName: identity_schema
+            tableName: user_permissions
+            columnNames: user_id, permission_id
+            constraintName: uq_user_permissions_user_permission
+
+        - addForeignKeyConstraint:
+            baseTableSchemaName: identity_schema
+            baseTableName: user_permissions
+            baseColumnNames: user_id
+            referencedTableSchemaName: identity_schema
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_permissions_user
+
+        - addForeignKeyConstraint:
+            baseTableSchemaName: identity_schema
+            baseTableName: user_permissions
+            baseColumnNames: permission_id
+            referencedTableSchemaName: identity_schema
+            referencedTableName: permissions
+            referencedColumnNames: id
+            constraintName: fk_user_permissions_permission
+
+        - createIndex:
+            schemaName: identity_schema
+            tableName: user_permissions
+            indexName: ix_user_permissions_permission_id
+            columns:
+              - column:
+                  name: permission_id

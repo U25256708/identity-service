@@ -1,31 +1,27 @@
 package org.latinflavor.identity.adapter.rest.controller;
 
-import org.latinflavor.identity.adapter.rest.request.GenerateOtpRequest;
-import org.latinflavor.identity.service.otp.GenerateOtpService;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import org.latinflavor.identity.application.port.in.otp.GenerateOtpUseCase;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class GenerateOtpController {
 
-    private final GenerateOtpService service;
+    private final GenerateOtpUseCase useCase;
 
     @PostMapping("/generate-code")
-    private ResponseEntity<GenerateOtpResponse> generateCode(@RequestBody GenerateOtpRequest generateOtpRequest) {
-        service.generateCode(generateOtpRequest.email());
-        return ResponseEntity.ok(new GenerateOtpResponse(generateOtpRequest.email(), "Success"));
+    private ResponseEntity<String> generateCode(@RequestBody GenerateOtpRequest generateOtpRequest) {
+        String code = useCase.generateCode(generateOtpRequest.email());
+        return ResponseEntity.ok().body(code);
     }
 
-    record GenerateOtpResponse(String email, String message) {
+    record GenerateOtpRequest(@NotBlank @Email String email, String code) {
     }
 
 

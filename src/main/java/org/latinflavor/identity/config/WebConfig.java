@@ -11,7 +11,7 @@ import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static org.latinflavor.identity.shared.APIConstants.API_PATH_PREFIX;
+import static org.latinflavor.identity.shared.constant.APIConstants.API_PATH_PREFIX;
 
 
 @Configuration
@@ -22,12 +22,12 @@ public class WebConfig implements WebMvcConfigurer {
     public ObjectMapper objectMapper() {
         return new ObjectMapper()
                 .registerModule(new JavaTimeModule())
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix(API_PATH_PREFIX, HandlerTypePredicate.forBasePackage("com.identity"));
+        configurer.addPathPrefix(API_PATH_PREFIX, HandlerTypePredicate.forBasePackage("org.latinflavor.identity"));
     }
 }
