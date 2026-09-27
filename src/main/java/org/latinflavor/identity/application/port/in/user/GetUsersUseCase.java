@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface GetUsersUseCase {
 
-    List<User> getAll();
+    List<User> searchInternalUsers();
 }

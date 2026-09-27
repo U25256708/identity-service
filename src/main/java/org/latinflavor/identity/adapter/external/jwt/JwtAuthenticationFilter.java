@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.latinflavor.identity.application.port.out.external.TokenPort;
 import org.latinflavor.identity.application.port.out.external.TokenSubject;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.latinflavor.identity.config.security.ServerResponseAuthenticationEntryPoint;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -56,9 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             return tokenPort.validate(token);
         } catch (RuntimeException exception) {
-            exception.printStackTrace();
             SecurityContextHolder.clearContext();
-            System.out.println("a");
             authenticationEntryPoint.commence(request, response, new BadCredentialsException("Invalid or expired JWT", exception));
             return null;
         }

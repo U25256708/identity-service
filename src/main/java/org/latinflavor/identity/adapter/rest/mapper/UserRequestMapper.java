@@ -32,6 +32,7 @@ public interface UserRequestMapper {
     CreateUserResponse toResponse(User user);
 
     @Mappings({
+            @Mapping(target = "roles", source = "roleNames"),
             @Mapping(target = "permissions", source = "permissionCodes")
     })
     GetUserResponse toRetrievalResponse(User user);

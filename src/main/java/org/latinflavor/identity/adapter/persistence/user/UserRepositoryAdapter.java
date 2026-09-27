@@ -43,8 +43,8 @@ public class UserRepositoryAdapter implements UserPersistPort, UserSearchPort {
     }
 
     @Override
-    public List<User> findAll() {
-        return repository.findAllWithDetails();
+    public List<User> findAllInternalWithDetails() {
+        return repository.findAllInternalWithDetails();
     }
 
     @Override
