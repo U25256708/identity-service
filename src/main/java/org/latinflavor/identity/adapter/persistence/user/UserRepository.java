@@ -34,6 +34,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
                 FROM User u
                 LEFT JOIN FETCH u.roles
                 LEFT JOIN FETCH u.permissions
+                WHERE u.userType = 'INTERNAL'
             """)
-    List<User> findAllWithDetails();
+    List<User> findAllInternalWithDetails();
 }

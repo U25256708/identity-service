@@ -48,8 +48,8 @@ public class UserManagementController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetUserResponse>> getAll() {
-        return ResponseEntity.ok(getUsersUseCase.getAll()
+    public ResponseEntity<List<GetUserResponse>> searchInternalUsers() {
+        return ResponseEntity.ok(getUsersUseCase.searchInternalUsers()
                 .stream()
                 .map(INSTANCE::toRetrievalResponse)
                 .toList());

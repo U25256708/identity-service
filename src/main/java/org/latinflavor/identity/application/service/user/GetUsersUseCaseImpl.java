@@ -17,7 +17,7 @@ public class GetUsersUseCaseImpl implements GetUsersUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> getAll() {
-        return userSearchPort.findAll();
+    public List<User> searchInternalUsers() {
+        return userSearchPort.findAllInternalWithDetails();
     }
 }

@@ -15,6 +15,6 @@ public interface UserSearchPort {
 
     Optional<User> findByDni(String dni);
 
-    List<User> findAll();
+    List<User> findAllInternalWithDetails();
 
 }
