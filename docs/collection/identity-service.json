@@ -1,0 +1,313 @@
+{
+  "info": {
+    "name": "identity-service",
+    "description": null,
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "generate-code",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/generate-code",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "generate-code"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"dhieghomtqqqqq@gmail.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "sign-in-username",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/sign-in",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "sign-in"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"USERNAME_PASSWORD\",\n  \"username\": \"admin\",\n  \"password\": \"latinflavor\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "sign-in-otp",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/sign-in",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "sign-in"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"OTP\",\n  \"email\": \"dhieghomtqqqqq@gmail.com\",\n  \"code\": \"979294\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "create-user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJraWQiOiJpZGVudGl0eS1yc2EtMjAyNi0wMSIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJsYXRpbmZsYXZvci1pZGVudGl0eSIsInN1YiI6ImEzZTI3MWZkLWJlMWYtNDUyZC1iY2ZjLWZmMjJjZGY0MjAyZiIsImF1ZCI6WyJsYXRpbmZsYXZvci1zZXJ2aWNlcyJdLCJpYXQiOjE3OTA0ODI2ODQsImV4cCI6MTc5MDQ4MzU4NCwianRpIjoiZWU1ZWNmZjMtN2Q4Yi00ZDQxLTk3ZGUtNzZlYzU1NWY4YzNhIiwiZW1haWwiOiJhZG1pbkBsYXRpbmZsYXZvci5jb20iLCJyb2xlcyI6WyJBRE1JTiJdLCJwZXJtaXNzaW9ucyI6WyJBQ0NFU1NfTUFOQUdFTUVOVCJdLCJ2ZXIiOjF9.Q5cTdkwfEalOn_3JMmfRCvITvCqRcHOebcywDAyGgbmyhyrq5bAmAQ3fQ0gFxpGWl99CB-C5wGeJSupVqTLnJcl1emN3uNwJkdOqaYjgWZ1Wb8sdy5dyYWVbPf85NfI2PDQRHAM0ccmwLnFLuctieqtHfNo9sQF7am5LNrKX33JJAcjcCnR25UBDci2NCSqkWqpekjGFB5cAflbrEaWrB3jnKwhUodfuyAug_WXR35U680b-Cb0r0HAW9kYPLsysin_mcLunVonFVf1le6P1TIVu-WUXdLuga0AFcnWAAyHwMDdfKkCn7iw6dPstuCKGFo_IMluHVfALZxj-K4_3ZA",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/users",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "users"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"jhieyme\",\n  \"password\": \"123456\",\n  \"email\": \"jhieyme@gmail.com\",\n  \"role\": \"INTERNAL\",\n  \"firstName\": \"Jhieyme\",\n  \"paternalLastName\": \"Torres\",\n  \"maternalLastName\": \"Palomino\",\n  \"phoneNumber\": \"987654322\",\n  \"dni\": \"12345673\",\n  \"permissions\": [\n    \"USER_MANAGEMENT\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "get-user",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJraWQiOiJpZGVudGl0eS1yc2EtMjAyNi0wMSIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJsYXRpbmZsYXZvci1pZGVudGl0eSIsInN1YiI6ImEzZTI3MWZkLWJlMWYtNDUyZC1iY2ZjLWZmMjJjZGY0MjAyZiIsImF1ZCI6WyJsYXRpbmZsYXZvci1zZXJ2aWNlcyJdLCJpYXQiOjE3OTA0Njc5ODksImV4cCI6MTc5MDQ2ODg4OSwianRpIjoiMjgzNDBmZDctNzhjZC00ZWE4LTllMzMtZTk1YTdhNDYxNjZlIiwiZW1haWwiOiJhZG1pbkBsYXRpbmZsYXZvci5jb20iLCJyb2xlcyI6WyJBRE1JTiJdLCJwZXJtaXNzaW9ucyI6WyJDVVNUT01FUl9NQU5BR0VNRU5UIiwiQk9PS0lOR19NQU5BR0VNRU5UIiwiQ0FUQUxPR19NQU5BR0VNRU5UIiwiUkVQT1JUX01BTkFHRU1FTlQiLCJVU0VSX01BTkFHRU1FTlQiLCJUQUJMRV9NQU5BR0VNRU5UIiwiQkFTSUNfTUFOQUdFTUVOVCIsIlNDSEVEVUxFX01BTkFHRU1FTlQiLCJBQ0NFU1NfTUFOQUdFTUVOVCJdLCJ2ZXIiOjF9.TbIDMYlGTAG-76Cf0_W7QnkzWVN9nc7zA4oZo0dI6eHAgzPPeIwDe2KrZ-KAQhlz3g53hbnEp7hpzlRSVcUgBE2xVabhHrvlHFe6WDTamEQIoozrzdaOirkyE1v0LBKao7jsdqU438oblyF3EflKVmnZc0kDPW1LvfTDD29OMo69HWi4X8ykVpYaouzySTPKC2MA6zCR1JALvVPU2fLmAgRKqAF0lboRq5k7tzWF-avEbGsZG7UZhg8gKTHMRLyXRmBdxFys6qIsmVwT4DVe5e2XoBoypsZATNzhk1eO8hRqX7m15wdE3QSr57NqaJuhDySkVd5ki8vOCBztsjYTgA",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/users/a3e271fd-be1f-452d-bcfc-ff22cdf4202f",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "users",
+            "a3e271fd-be1f-452d-bcfc-ff22cdf4202f"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "get-users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJraWQiOiJpZGVudGl0eS1yc2EtMjAyNi0wMSIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJsYXRpbmZsYXZvci1pZGVudGl0eSIsInN1YiI6ImEzZTI3MWZkLWJlMWYtNDUyZC1iY2ZjLWZmMjJjZGY0MjAyZiIsImF1ZCI6WyJsYXRpbmZsYXZvci1zZXJ2aWNlcyJdLCJpYXQiOjE3OTA0ODI0MzAsImV4cCI6MTc5MDQ4MzMzMCwianRpIjoiN2YwZjFkZDQtMzYzNS00YzQzLTg0MGYtOGI2OGQ1YzgwMmE5IiwiZW1haWwiOiJhZG1pbkBsYXRpbmZsYXZvci5jb20iLCJyb2xlcyI6WyJBRE1JTiJdLCJwZXJtaXNzaW9ucyI6WyJBQ0NFU1NfTUFOQUdFTUVOVCJdLCJ2ZXIiOjF9.n9RzR_ieQ1QwIdamjdYEU6Fv26FxJTK1cl5ViTcZai6RVpUmhQVO4etUxk1ir_8rTvfTNSqdQzVyyvV55Wqk7BxZfSW-VE5eoKwYQ8O6zvmrlpTs2qxSPTzl4059AytN1AK1pZSS9yzdrfXgKwvzvNhBhrNVWKbmc2TmOETuh8SEqxSQpTX9oHrz9epkXUoETxo24a8yEheOkGto8gIKYI0gZ_uEFBanBvQgmaX0eWuWO7tBwwL3cguSe3DZ0um7itdJGMOmFZYR1fUefWdjKpGzLvz3sVKc99gkC0bv1HGjW1SrddjkNr4w8hN3qxlL82C3aBnQnlaFDTO9vaFP8w",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/users",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "users"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "disable-user",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/users/a0c5abee-27b6-4606-9c0d-23735e85d54a/disable",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "users",
+            "a0c5abee-27b6-4606-9c0d-23735e85d54a",
+            "disable"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "update-own-user",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/users/me",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "users",
+            "me"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstName\": \"Dhiegoaaaa\",\n  \"paternalLastName\": \"Torreaaaaa\",\n  \"maternalLastName\": \"Macetas\",\n  \"phoneNumber\": \"987654321\",\n  \"dni\": \"12345672\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "modify-user-role",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJraWQiOiJpZGVudGl0eS1yc2EtMjAyNi0wMSIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJsYXRpbmZsYXZvci1pZGVudGl0eSIsInN1YiI6ImEzZTI3MWZkLWJlMWYtNDUyZC1iY2ZjLWZmMjJjZGY0MjAyZiIsImF1ZCI6WyJsYXRpbmZsYXZvci1zZXJ2aWNlcyJdLCJpYXQiOjE3OTA0ODI3ODEsImV4cCI6MTc5MDQ4MzY4MSwianRpIjoiNjc0MzA4MmYtMTYyYS00YWNkLTgxYmEtNjBlZDAwYjk5NmQxIiwiZW1haWwiOiJhZG1pbkBsYXRpbmZsYXZvci5jb20iLCJyb2xlcyI6WyJBRE1JTiJdLCJwZXJtaXNzaW9ucyI6WyJBQ0NFU1NfTUFOQUdFTUVOVCJdLCJ2ZXIiOjF9.AF5TD8rhhi9H5IjBu0I6gx8PAlkpQ9Ej14qUZlUh7vnvIYJWQGsuBbUL2gmX56zZ-xsG7UhWiReT18Y9nD4CUUhE5ahll1xaOjZAVheWfurOe0SiyUbE0P_WtJtygLIU_1NsZTbCwRPswmkW4WSvZhqAj1FKhjDqtzgLrLRWO0u-FNyCYEwuzvvHV3zG8MU6qXAZXsHMtcRjkUjAWCLOmGqHXjKI5AqT-PrLlttdauR7Zh5x1GtK72sRU6kF2OhZx5e_VYnJCLGRSKsRBoeCeVDsoFZYM9qa-m8a229xYdbuvozUgHl_oh-c0dxH94R_PaBoQHdVEWhNa02ujuBqIQ",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:8080/identity-service/v1/users/:userId/access",
+          "protocol": "http",
+          "host": [
+            "localhost:8080"
+          ],
+          "path": [
+            "identity-service",
+            "v1",
+            "users",
+            ":userId",
+            "access"
+          ],
+          "query": [],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "5e83a2d7-c62d-46ba-b22a-fa4d7a80bf45"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"role\": \"ADMIN\",\n  \"permissions\": [\n    \"ACCESS_MANAGEMENT\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "variable": []
+}

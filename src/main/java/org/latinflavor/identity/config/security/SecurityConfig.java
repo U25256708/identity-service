@@ -29,6 +29,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.latinflavor.identity.config.properties.WebApplicationProperties.WebSecurityProperties.PathAuthorizationRule;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -86,9 +87,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(webSecurityProperties.unauthenticatedMatchers()).permitAll();
 
-        for (PathAuthorizationRule rule: webSecurityProperties.getAuthorizationRules()) {
+        for (PathAuthorizationRule rule : webSecurityProperties.getAuthorizationRules()) {
             authorization = authorization
-                    .requestMatchers(webSecurityProperties.matcherFor(rule.getPaths()))
+                    .requestMatchers(rule.getMethod(), rule.getPath())
                     .access(authorityManager(rule));
         }
         authorization
@@ -99,13 +100,14 @@ public class SecurityConfig {
     private AuthorizationManager<RequestAuthorizationContext> authorityManager(
             WebApplicationProperties.WebSecurityProperties.PathAuthorizationRule rule) {
         return (authentication, context) -> {
-            var authorities = authentication.get().getAuthorities().stream()
+            Set<String> authorities = authentication.get().getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toSet());
             boolean hasAllowedRole = rule.getRoles().isEmpty()
                     || rule.getRoles().stream().anyMatch(authorities::contains);
-            boolean hasRequiredPermissions = authorities.containsAll(rule.getPermissions());
-            return new AuthorizationDecision(hasAllowedRole && hasRequiredPermissions);
+            boolean hasRequiredPermission = rule.getPermissions().isEmpty()
+                    || rule.getPermissions().stream().anyMatch(authorities::contains);
+            return new AuthorizationDecision(hasAllowedRole && hasRequiredPermission);
         };
     }
 

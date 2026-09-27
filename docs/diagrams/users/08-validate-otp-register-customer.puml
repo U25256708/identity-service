@@ -1,0 +1,59 @@
+@startuml
+title Clientes - Validación de OTP y registro
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam backgroundColor #FFFFFF
+skinparam sequence {
+  ArrowColor #425466
+  LifeLineBorderColor #AAB7C4
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBorderColor #527C82
+  ParticipantBackgroundColor #E7F1F2
+  ParticipantFontColor #243746
+  ActorBorderColor #527C82
+  ActorBackgroundColor #E7F1F2
+  ActorFontColor #243746
+  ActivationBorderColor #D5AA3A
+  ActivationBackgroundColor #F8E7A1
+}
+hide footbox
+autonumber
+
+actor "Cliente" as Customer
+participant "Pantalla de registro" as UI
+participant "API Identity" as API
+participant "Autenticación por OTP" as Auth
+database "Base de datos" as DB
+participant "Emisión de tokens" as Token
+
+Customer -> UI: Ingresa el código recibido
+UI -> API: Envía email, código y type=OTP\nPOST /identity-service/v1/sign-in
+activate API
+API -> Auth: Solicita validar el OTP
+activate Auth
+Auth -> DB: Busca el último OTP pendiente del email
+DB --> Auth: Devuelve OTP, vigencia e intentos
+Auth -> Auth: Verifica código, vigencia y máximo de intentos
+Auth -> DB: Busca cliente por email
+DB --> Auth: Devuelve cliente o indica que no existe
+
+alt Cliente no registrado
+  Auth -> Auth: Prepara cliente activo con rol BASIC\ny permiso BASIC_MANAGEMENT
+  Auth -> DB: Guarda el nuevo cliente, rol y permiso
+  DB --> Auth: Confirma registro
+else Cliente existente y activo
+  Auth -> Auth: Utiliza la cuenta existente
+end
+
+Auth -> Token: Solicita token de acceso del cliente
+activate Token
+Token --> Auth: Devuelve JWT y tiempo de vigencia
+deactivate Token
+Auth -> DB: Marca el OTP como validado
+DB --> Auth: Confirma actualización
+Auth --> API: Autenticación completada
+deactivate Auth
+API --> UI: 200 OK + access token, vigencia y permisos
+deactivate API
+UI --> Customer: Completa el registro e inicia la sesión
+@enduml

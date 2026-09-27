@@ -10,6 +10,7 @@ public enum UserErrors implements ApplicationError {
     USER_IS_NOT_ACTIVE(HttpStatus.BAD_REQUEST, "The user with email %s is not active"),
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Invalid username or password"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User %s was not found"),
+    USER_NOT_INTERNAL(HttpStatus.BAD_REQUEST, "User %s is not an internal user"),
     USER_EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "A user with email %s already exists"),
     USER_USERNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "A user with username %s already exists"),
     USER_DNI_ALREADY_EXISTS(HttpStatus.CONFLICT, "A user with DNI %s already exists"),

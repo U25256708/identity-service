@@ -21,12 +21,11 @@ public class GenerateCodeUseCaseImpl implements GenerateOtpUseCase {
     private final NotificationPort notificationPort;
 
     @Override
-    public String generateCode(String email) {
+    public void generateCode(String email) {
         String code = generateVerificationCode();
         String codeHashed = DigestUtils.sha256Hex(email + code);
         persistPort.persist(OtpCredentials.of(email, codeHashed));
         notificationPort.notify(email, code);
-        return code;
     }
 
     public String generateVerificationCode() {

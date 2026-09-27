@@ -1,0 +1,50 @@
+@startuml
+title Users - Registro de usuario
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam backgroundColor #FFFFFF
+skinparam sequence {
+  ArrowColor #425466
+  LifeLineBorderColor #AAB7C4
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBorderColor #527C82
+  ParticipantBackgroundColor #E7F1F2
+  ParticipantFontColor #243746
+  ActorBorderColor #527C82
+  ActorBackgroundColor #E7F1F2
+  ActorFontColor #243746
+  ActivationBorderColor #D5AA3A
+  ActivationBackgroundColor #F8E7A1
+}
+hide footbox
+autonumber
+
+actor "Administrador" as User
+participant "Pantalla de usuarios" as UI
+participant "API Identity" as API
+participant "Control de acceso" as Security
+participant "Gestión de usuarios" as Users
+database "Base de datos" as DB
+
+User -> UI: Presiona «Crear usuario»
+UI --> User: Muestra formulario
+User -> UI: Completa datos y confirma
+UI -> API: Envía datos del usuario\nPOST /identity-service/v1/users
+activate API
+API -> Security: Verifica rol ADMIN\ny CREATE_USER, USER_MANAGEMENT\no ACCESS_MANAGEMENT
+Security --> API: Acceso autorizado
+API -> Users: Solicita registrar usuario
+activate Users
+Users -> Users: Valida datos y verifica duplicados
+Users -> DB: Busca email, username y DNI
+DB --> Users: No hay duplicados
+Users -> Users: Prepara usuario y protege contraseña
+Users -> DB: Guarda usuario, rol y permisos
+DB --> Users: Confirma registro
+Users --> API: Devuelve datos del usuario creado
+deactivate Users
+API --> UI: 201 Created + datos del usuario
+deactivate API
+UI --> User: Muestra confirmación del registro
+
+@enduml
