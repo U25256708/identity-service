@@ -90,18 +90,24 @@ public class OneTimePasswordAuthenticationProvider implements AuthenticationProv
         OtpCredentials otpCredentials = otpCredentialsSearchPort.findLatestPendingByEmail(email)
                 .orElseThrow(() -> new ApplicationException(INVALID_OTP_CODE));
 
-        boolean isValid = otpCredentials.isExpired()
-                && otpCredentials.getAttempts() < 3
-                && MessageDigest.isEqual(otpCredentials.getCodeHash().getBytes(),
-                DigestUtils.sha256Hex(email + code).getBytes());
-
-        if (!isValid) {
-            if (otpCredentials.isExpired() && otpCredentials.getAttempts() < 3) {
-                otpCredentials.registerFailedAttempt();
-                otpCredentialsPersistPort.persist(otpCredentials);
-            }
+        if (otpCredentials.isExpired()) {
             throw new ApplicationException(EXPIRED_OTP_CODE);
         }
+
+        if (otpCredentials.getAttempts() >= 3) {
+            throw new ApplicationException(INVALID_OTP_CODE);
+        }
+
+        boolean codeMatches = MessageDigest.isEqual(
+                otpCredentials.getCodeHash().getBytes(),
+                DigestUtils.sha256Hex(email + code).getBytes());
+
+        if (!codeMatches) {
+            otpCredentials.registerFailedAttempt();
+            otpCredentialsPersistPort.persist(otpCredentials);
+            throw new ApplicationException(INVALID_OTP_CODE);
+        }
+
         return otpCredentials;
     }
 

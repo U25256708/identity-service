@@ -1,5 +1,6 @@
 package org.latinflavor.identity.adapter.rest.controller;
 
+import jakarta.validation.Valid;
 import org.latinflavor.identity.adapter.rest.request.SignInRequest;
 import org.latinflavor.identity.adapter.rest.response.SignInResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class SignInController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/sign-in")
-    ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest request) {
+    ResponseEntity<SignInResponse> signIn(@Valid @RequestBody SignInRequest request) {
         Authentication authenticationRequest = AuthenticationTokenFactory.create(request);
         Authentication authenticationResult = authenticationManager.authenticate(authenticationRequest);
         IssuedToken issuedToken = (IssuedToken) authenticationResult.getPrincipal();
