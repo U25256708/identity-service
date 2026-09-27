@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.latinflavor.identity.adapter.rest.request.CreateUserRequest;
 import org.latinflavor.identity.adapter.rest.request.UpdateUserRequest;
+import org.latinflavor.identity.adapter.rest.request.UpdateInternalAccessRequest;
 import org.latinflavor.identity.adapter.rest.response.CreateUserResponse;
 import org.latinflavor.identity.adapter.rest.response.GetUserResponse;
 import org.latinflavor.identity.application.port.in.user.DeleteUserUseCase;
@@ -11,15 +12,11 @@ import org.latinflavor.identity.application.port.in.user.GetUserUseCase;
 import org.latinflavor.identity.application.port.in.user.GetUsersUseCase;
 import org.latinflavor.identity.application.port.in.user.CreateUserUseCase;
 import org.latinflavor.identity.application.port.in.user.UpdateUserUseCase;
+import org.latinflavor.identity.application.port.in.user.UpdateInternalAccessUseCase;
+import org.latinflavor.identity.application.port.out.external.TokenSubject;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +33,7 @@ public class UserManagementController {
     private final GetUserUseCase getUserUseCase;
     private final GetUsersUseCase getUsersUseCase;
     private final UpdateUserUseCase updateUserUseCase;
+    private final UpdateInternalAccessUseCase updateInternalAccessUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
 
     @PostMapping
@@ -57,10 +55,17 @@ public class UserManagementController {
                 .toList());
     }
 
-    @PutMapping("/{id}/update")
-    public ResponseEntity<Void> update(@PathVariable UUID id,
+    @PutMapping("/me")
+    public ResponseEntity<Void> update(@AuthenticationPrincipal TokenSubject authenticatedUser,
                                        @Valid @RequestBody UpdateUserRequest request) {
-        updateUserUseCase.update(id.toString(), INSTANCE.toCommand(request));
+        updateUserUseCase.update(authenticatedUser.userId().toString(), INSTANCE.toCommand(request));
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/access")
+    public ResponseEntity<Void> updateInternalAccess(@PathVariable UUID id,
+                                                     @Valid @RequestBody UpdateInternalAccessRequest request) {
+        updateInternalAccessUseCase.update(id.toString(), INSTANCE.toCommand(request));
         return ResponseEntity.noContent().build();
     }
 

@@ -1,6 +1,11 @@
 package org.latinflavor.identity.domain.model;
 
 public enum PermissionCode {
+    CREATE_USER,
+    READ_USER,
+    UPDATE_OWN_USER,
+    DISABLE_USER,
+    MANAGE_USER_ACCESS,
     USER_MANAGEMENT,
     ACCESS_MANAGEMENT,
     CUSTOMER_MANAGEMENT,

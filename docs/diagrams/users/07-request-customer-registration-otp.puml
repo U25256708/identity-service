@@ -1,0 +1,46 @@
+@startuml
+title Clientes - Solicitud de OTP para registro
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam backgroundColor #FFFFFF
+skinparam sequence {
+  ArrowColor #425466
+  LifeLineBorderColor #AAB7C4
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBorderColor #527C82
+  ParticipantBackgroundColor #E7F1F2
+  ParticipantFontColor #243746
+  ActorBorderColor #527C82
+  ActorBackgroundColor #E7F1F2
+  ActorFontColor #243746
+  ActivationBorderColor #D5AA3A
+  ActivationBackgroundColor #F8E7A1
+}
+hide footbox
+autonumber
+
+actor "Cliente" as Customer
+participant "Pantalla de registro" as UI
+participant "API Identity" as API
+participant "Gestión de OTP" as OTP
+database "Base de datos" as DB
+participant "Servicio de correo" as Email
+
+Customer -> UI: Ingresa su correo y solicita el código
+UI -> API: Envía correo electrónico\nPOST /identity-service/v1/generate-code
+activate API
+API -> OTP: Solicita generar un OTP
+activate OTP
+OTP -> OTP: Genera código de 6 dígitos\ny protege su contenido
+OTP -> DB: Guarda OTP pendiente con vigencia de 8 minutos
+DB --> OTP: Confirma almacenamiento
+OTP -> Email: Envía código al correo del cliente
+activate Email
+Email --> OTP: Confirma envío
+deactivate Email
+OTP --> API: Solicitud procesada
+deactivate OTP
+API --> UI: 200 OK sin contenido
+deactivate API
+UI --> Customer: Solicita ingresar el código recibido
+@enduml

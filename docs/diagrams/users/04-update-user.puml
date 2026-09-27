@@ -1,0 +1,50 @@
+@startuml
+title Users - Actualización de información básica
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam backgroundColor #FFFFFF
+skinparam sequence {
+  ArrowColor #425466
+  LifeLineBorderColor #AAB7C4
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBorderColor #527C82
+  ParticipantBackgroundColor #E7F1F2
+  ParticipantFontColor #243746
+  ActorBorderColor #527C82
+  ActorBackgroundColor #E7F1F2
+  ActorFontColor #243746
+  ActivationBorderColor #D5AA3A
+  ActivationBackgroundColor #F8E7A1
+}
+hide footbox
+autonumber
+
+actor "Usuario interno" as User
+participant "Pantalla de usuarios" as UI
+participant "API Identity" as API
+participant "Control de acceso" as Security
+participant "Gestión de usuarios" as Users
+database "Base de datos" as DB
+
+User -> UI: Presiona «Editar información básica»
+UI -> User: Muestra formulario de edición
+User -> UI: Confirma cambios
+UI -> API: Envía cambios básicos\nPUT /identity-service/v1/users/me
+activate API
+API -> Security: Verifica rol INTERNAL o ADMIN\ny UPDATE_OWN_USER, USER_MANAGEMENT\no ACCESS_MANAGEMENT
+Security --> API: Acceso autorizado
+API -> Users: Solicita actualizar al usuario autenticado
+activate Users
+Users -> Users: Valida los datos recibidos
+Users -> DB: Busca al usuario autenticado con roles/permisos
+DB --> Users: Devuelve usuario encontrado
+Users -> Users: Aplica cambios de datos básicos
+Users -> DB: Guarda información básica actualizada
+DB --> Users: Confirma actualización
+Users --> API: Actualización completada
+deactivate Users
+API --> UI: 204 No Content
+deactivate API
+UI --> User: Muestra confirmación de cambios
+
+@enduml

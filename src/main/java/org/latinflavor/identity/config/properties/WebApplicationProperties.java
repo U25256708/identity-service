@@ -1,6 +1,7 @@
 package org.latinflavor.identity.config.properties;
 
 import lombok.Data;
+import org.springframework.http.HttpMethod;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -10,6 +11,8 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Component
@@ -84,9 +87,10 @@ public class WebApplicationProperties {
 
         @Data
         public static class PathAuthorizationRule {
-            private List<String> paths = new ArrayList<>();
+            private String path;
+            private HttpMethod method;
             private List<String> roles = new ArrayList<>();
-            private List<String> permissions = new ArrayList<>();
+            private Set<String> permissions = new HashSet<>();
         }
     }
 }

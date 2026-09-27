@@ -100,6 +100,11 @@ public class User extends AbstractAuditable<UUID> {
         return this;
     }
 
+    public User replaceRole(Role role) {
+        this.roles.clear();
+        return assignRole(role);
+    }
+
     public User update(Consumer<User> updater) {
         requireNonNull(updater, "updater must not be null")
                 .accept(this);

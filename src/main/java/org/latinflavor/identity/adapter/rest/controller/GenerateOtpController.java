@@ -1,5 +1,6 @@
 package org.latinflavor.identity.adapter.rest.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.latinflavor.identity.application.port.in.otp.GenerateOtpUseCase;
@@ -16,12 +17,12 @@ public class GenerateOtpController {
     private final GenerateOtpUseCase useCase;
 
     @PostMapping("/generate-code")
-    private ResponseEntity<String> generateCode(@RequestBody GenerateOtpRequest generateOtpRequest) {
-        String code = useCase.generateCode(generateOtpRequest.email());
-        return ResponseEntity.ok().body(code);
+    public ResponseEntity<Void> generateCode(@Valid @RequestBody GenerateOtpRequest generateOtpRequest) {
+        useCase.generateCode(generateOtpRequest.email());
+        return ResponseEntity.ok().build();
     }
 
-    record GenerateOtpRequest(@NotBlank @Email String email, String code) {
+    record GenerateOtpRequest(@NotBlank @Email String email) {
     }
 
 

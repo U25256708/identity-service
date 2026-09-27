@@ -1,0 +1,47 @@
+@startuml
+title Users - Actualización de rol y permisos de usuario interno
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam backgroundColor #FFFFFF
+skinparam sequence {
+  ArrowColor #425466
+  LifeLineBorderColor #AAB7C4
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBorderColor #527C82
+  ParticipantBackgroundColor #E7F1F2
+  ParticipantFontColor #243746
+  ActorBorderColor #527C82
+  ActorBackgroundColor #E7F1F2
+  ActorFontColor #243746
+  ActivationBorderColor #D5AA3A
+  ActivationBackgroundColor #F8E7A1
+}
+hide footbox
+autonumber
+
+actor "Administrador" as User
+participant "Pantalla de usuarios" as UI
+participant "API Identity" as API
+participant "Control de acceso" as Security
+participant "Gestión de usuarios" as Users
+database "Base de datos" as DB
+
+User -> UI: Elige rol y permisos del usuario interno
+UI -> API: Envía rol y permisos\nPATCH /identity-service/v1/users/{id}/access
+activate API
+API -> Security: Verifica rol ADMIN\ny MANAGE_USER_ACCESS, USER_MANAGEMENT\no ACCESS_MANAGEMENT
+Security --> API: Acceso autorizado
+API -> Users: Solicita actualizar acceso
+activate Users
+Users -> DB: Busca usuario y sus asignaciones
+DB --> Users: Devuelve usuario y tipo
+Users -> Users: Verifica que sea usuario INTERNAL
+Users -> Users: Valida rol y permisos solicitados
+Users -> DB: Guarda rol y permisos asignados
+DB --> Users: Confirma actualización
+Users --> API: Actualización completada
+deactivate Users
+API --> UI: 204 No Content
+deactivate API
+UI --> User: Muestra confirmación
+@enduml

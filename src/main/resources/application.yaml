@@ -61,15 +61,48 @@ web:
       - /identity-service/v1/generate-code
       - /swagger-ui/**
       - /v3/api-docs/**
-    authenticated-paths:
-      - /identity-service/v1/users/**
     authorization-rules:
-      - paths:
-          - /identity-service/v1/users/**
+      - path: /identity-service/v1/users/*/access
+        method: PATCH
+        roles:
+          - ADMIN
+        permissions:
+          - MANAGE_USER_ACCESS
+          - USER_MANAGEMENT
+          - ACCESS_MANAGEMENT
+      - path: /identity-service/v1/users/me
+        method: PUT
+        roles:
+          - INTERNAL
+          - ADMIN
+        permissions:
+          - UPDATE_OWN_USER
+          - USER_MANAGEMENT
+          - ACCESS_MANAGEMENT
+      - path: /identity-service/v1/users/*/disable
+        method: DELETE
+        roles:
+          - ADMIN
+        permissions:
+          - DISABLE_USER
+          - USER_MANAGEMENT
+          - ACCESS_MANAGEMENT
+      - path: /identity-service/v1/users
+        method: POST
+        roles:
+          - ADMIN
+        permissions:
+          - CREATE_USER
+          - USER_MANAGEMENT
+          - ACCESS_MANAGEMENT
+      - path: /identity-service/v1/users/**
+        method: GET
         roles:
           - ADMIN
           - INTERNAL
         permissions:
+          - READ_USER
+          - USER_MANAGEMENT
           - ACCESS_MANAGEMENT
 
 logging:
