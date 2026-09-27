@@ -1,0 +1,13 @@
+package org.latinflavor.identity.domain.model;
+
+public enum PermissionCode {
+    USER_MANAGEMENT,
+    ACCESS_MANAGEMENT,
+    CUSTOMER_MANAGEMENT,
+    BOOKING_MANAGEMENT,
+    TABLE_MANAGEMENT,
+    SCHEDULE_MANAGEMENT,
+    CATALOG_MANAGEMENT,
+    REPORT_MANAGEMENT,
+    BASIC_MANAGEMENT,
+}

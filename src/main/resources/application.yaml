@@ -57,20 +57,42 @@ web:
 
   security:
     unauthenticated-paths:
-      - /api/auth/**
+      - /identity-service/v1/sign-in
+      - /identity-service/v1/generate-code
       - /swagger-ui/**
       - /v3/api-docs/**
-      - /identity-service/v1/**
     authenticated-paths:
-      - /api/**
+      - /identity-service/v1/users/**
+    authorization-rules:
+      - paths:
+          - /identity-service/v1/users/**
+        roles:
+          - ADMIN
+          - INTERNAL
+        permissions:
+          - ACCESS_MANAGEMENT
 
 logging:
   level:
     root: INFO
     org.springframework.web: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
     org.springframework.security: DEBUG
 
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} : %msg%n"
+
+external:
+  sendgrid:
+    enabled: ${SENDGRID_ENABLED}
+    api-key: ${SENDGRID_API_KEY}
+    from-email: ${SENDGRID_FROM_EMAIL}
+    template-id: ${SENDGRID_TEMPLATE_ID}
+
+security:
+  jwt:
+    issuer: ${JWT_ISSUER}
+    audience: ${JWT_AUDIENCE}
+    key-id: ${JWT_KEY_ID}
+    access-token-ttl: ${JWT_ACCESS_TOKEN_TTL}
+    private-key-base64: ${JWT_PRIVATE_KEY_BASE64}
+    public-key-base64: ${JWT_PUBLIC_KEY_BASE64}

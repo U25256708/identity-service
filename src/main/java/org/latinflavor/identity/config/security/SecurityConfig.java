@@ -1,27 +1,35 @@
 package org.latinflavor.identity.config.security;
 
+import org.latinflavor.identity.adapter.external.jwt.JwtAuthenticationFilter;
 import org.latinflavor.identity.config.properties.WebApplicationProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
-import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.latinflavor.identity.config.properties.WebApplicationProperties.WebSecurityProperties.PathAuthorizationRule;
+
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +38,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final WebApplicationProperties props;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ServerResponseAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,8 +48,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(SecurityConfig::configureExceptionHandling)
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(auth -> setupRequestAuthorization(auth, props.getSecurity()))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .headers(this::configureHeaders)
                 .build();
 
@@ -62,19 +73,40 @@ public class SecurityConfig {
         return new ProviderManager(providers);
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     private void setupRequestAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry httpConfigurer,
                                            WebApplicationProperties.WebSecurityProperties webSecurityProperties) {
 
-        httpConfigurer
+        AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorization = httpConfigurer
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(webSecurityProperties.unauthenticatedMatchers()).permitAll()
-                .requestMatchers(webSecurityProperties.authenticatedMatchers()).authenticated();
+                .requestMatchers(webSecurityProperties.unauthenticatedMatchers()).permitAll();
+
+        for (PathAuthorizationRule rule: webSecurityProperties.getAuthorizationRules()) {
+            authorization = authorization
+                    .requestMatchers(webSecurityProperties.matcherFor(rule.getPaths()))
+                    .access(authorityManager(rule));
+        }
+        authorization
+                .requestMatchers(webSecurityProperties.authenticatedMatchers()).authenticated()
+                .anyRequest().denyAll();
     }
 
-    private static void configureExceptionHandling(ExceptionHandlingConfigurer<HttpSecurity> handlingConfigurer) {
-        handlingConfigurer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+    private AuthorizationManager<RequestAuthorizationContext> authorityManager(
+            WebApplicationProperties.WebSecurityProperties.PathAuthorizationRule rule) {
+        return (authentication, context) -> {
+            var authorities = authentication.get().getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toSet());
+            boolean hasAllowedRole = rule.getRoles().isEmpty()
+                    || rule.getRoles().stream().anyMatch(authorities::contains);
+            boolean hasRequiredPermissions = authorities.containsAll(rule.getPermissions());
+            return new AuthorizationDecision(hasAllowedRole && hasRequiredPermissions);
+        };
     }
-
 
 }

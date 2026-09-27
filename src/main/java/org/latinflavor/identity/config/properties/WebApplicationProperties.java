@@ -50,6 +50,12 @@ public class WebApplicationProperties {
 
         private List<String> authenticatedPaths = new ArrayList<>();
 
+        private List<PathAuthorizationRule> authorizationRules = new ArrayList<>();
+
+        public RequestMatcher matcherFor(List<String> paths) {
+            return buildMatcher(paths);
+        }
+
         public RequestMatcher unauthenticatedMatchers() {
             return buildMatcher(unauthenticatedPaths);
         }
@@ -74,6 +80,13 @@ public class WebApplicationProperties {
             return PathPatternRequestMatcher
                     .withDefaults()
                     .matcher(path);
+        }
+
+        @Data
+        public static class PathAuthorizationRule {
+            private List<String> paths = new ArrayList<>();
+            private List<String> roles = new ArrayList<>();
+            private List<String> permissions = new ArrayList<>();
         }
     }
 }
