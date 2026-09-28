@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import org.latinflavor.identity.adapter.rest.request.SignInRequest;
 import org.latinflavor.identity.adapter.rest.response.SignInResponse;
 import lombok.RequiredArgsConstructor;
-import org.latinflavor.identity.application.port.out.external.IssuedToken;
+import org.latinflavor.identity.application.port.out.external.jwt.IssuedToken;
 import org.latinflavor.identity.application.service.auth.AuthenticationTokenFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -12,8 +12,9 @@ Todos los endpoints incluyen el prefijo `/identity-service`.
 | El rol enviado no existe o está inactivo. | `POST /identity-service/v1/users` | 400 | `ROLE_NOT_FOUND` | `Role {role} was not found or is inactive` |
 | Algún permiso enviado no existe o está inactivo. | `POST /identity-service/v1/users` | 400 | `PERMISSION_NOT_FOUND` | `Permission {permission} was not found or is inactive` |
 | No existe un usuario con el UUID indicado. | `GET /identity-service/v1/users/{id}` | 404 | `USER_NOT_FOUND` | `User {id} was not found` |
-| El usuario autenticado ya no existe. | `PUT /identity-service/v1/users/me` | 404 | `USER_NOT_FOUND` | `User {id} was not found` |
-| El usuario autenticado no es de tipo `INTERNAL`. | `PUT /identity-service/v1/users/me` | 400 | `USER_NOT_INTERNAL` | `User {id} is not an internal user` |
+| Algún valor del parámetro `filters` no corresponde a ningún campo buscable. | `GET /identity-service/v1/users` | 400 | `UNSUPPORTED_USER_SEARCH_FILTER` | `Unsupported user search filter: {filter}` |
+| No existe el usuario a actualizar. | `PUT /identity-service/v1/users/{id}` | 404 | `USER_NOT_FOUND` | `User {id} was not found` |
+| El usuario que se quiere actualizar no es de tipo `INTERNAL`. | `PUT /identity-service/v1/users/{id}` | 400 | `USER_NOT_INTERNAL` | `User {id} is not an internal user` |
 | No existe el usuario cuyo acceso se quiere modificar. | `PATCH /identity-service/v1/users/{id}/access` | 404 | `USER_NOT_FOUND` | `User {id} was not found` |
 | El usuario cuyo acceso se modifica no es de tipo `INTERNAL`. | `PATCH /identity-service/v1/users/{id}/access` | 400 | `USER_NOT_INTERNAL` | `User {id} is not an internal user` |
 | El nuevo rol no existe o está inactivo. | `PATCH /identity-service/v1/users/{id}/access` | 400 | `ROLE_NOT_FOUND` | `Role {role} was not found or is inactive` |

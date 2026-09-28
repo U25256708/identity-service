@@ -14,6 +14,7 @@ public enum UserErrors implements ApplicationError {
     USER_EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "A user with email %s already exists"),
     USER_USERNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "A user with username %s already exists"),
     USER_DNI_ALREADY_EXISTS(HttpStatus.CONFLICT, "A user with DNI %s already exists"),
+    UNSUPPORTED_USER_SEARCH_FILTER(HttpStatus.BAD_REQUEST, "Unsupported user search filter: %s"),
     ROLE_NOT_FOUND(HttpStatus.BAD_REQUEST, "Role %s was not found or is inactive"),
     PERMISSION_NOT_FOUND(HttpStatus.BAD_REQUEST, "Permission %s was not found or is inactive");
 

@@ -3,7 +3,7 @@ package org.latinflavor.identity.application.service.otp;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.latinflavor.identity.application.port.in.otp.GenerateOtpUseCase;
-import org.latinflavor.identity.application.port.out.external.NotificationPort;
+import org.latinflavor.identity.application.port.out.external.sendgrid.NotificationPort;
 import org.latinflavor.identity.application.port.out.otp.OtpCredentialsPersistPort;
 import org.latinflavor.identity.domain.model.OtpCredentials;
 import org.springframework.stereotype.Service;
