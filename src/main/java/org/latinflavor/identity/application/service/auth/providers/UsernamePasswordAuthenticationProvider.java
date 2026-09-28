@@ -1,9 +1,9 @@
 package org.latinflavor.identity.application.service.auth.providers;
 
 import lombok.RequiredArgsConstructor;
-import org.latinflavor.identity.application.port.out.external.IssuedToken;
-import org.latinflavor.identity.application.port.out.external.TokenPort;
-import org.latinflavor.identity.application.port.out.external.TokenSubject;
+import org.latinflavor.identity.application.port.out.external.jwt.IssuedToken;
+import org.latinflavor.identity.application.port.out.external.jwt.TokenPort;
+import org.latinflavor.identity.application.port.out.external.jwt.TokenSubject;
 import org.latinflavor.identity.application.port.out.user.UserSearchPort;
 import org.latinflavor.identity.domain.model.User;
 import org.latinflavor.identity.shared.exception.ApplicationException;

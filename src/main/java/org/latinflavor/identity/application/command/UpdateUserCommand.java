@@ -4,6 +4,7 @@ public record UpdateUserCommand(
         String firstName,
         String paternalLastName,
         String maternalLastName,
-        String phoneNumber
+        String phoneNumber,
+        Boolean active
 ) {
 }

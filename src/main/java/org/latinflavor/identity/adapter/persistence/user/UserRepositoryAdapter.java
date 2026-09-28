@@ -4,6 +4,9 @@ import org.latinflavor.identity.application.port.out.user.UserPersistPort;
 import org.latinflavor.identity.application.port.out.user.UserSearchPort;
 import org.latinflavor.identity.domain.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

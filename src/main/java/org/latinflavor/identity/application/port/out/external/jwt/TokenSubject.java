@@ -1,4 +1,4 @@
-package org.latinflavor.identity.application.port.out.external;
+package org.latinflavor.identity.application.port.out.external.jwt;
 
 import java.util.Set;
 import java.util.UUID;

@@ -2,9 +2,9 @@ package org.latinflavor.identity.adapter.external.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.latinflavor.identity.application.port.out.external.IssuedToken;
-import org.latinflavor.identity.application.port.out.external.TokenPort;
-import org.latinflavor.identity.application.port.out.external.TokenSubject;
+import org.latinflavor.identity.application.port.out.external.jwt.IssuedToken;
+import org.latinflavor.identity.application.port.out.external.jwt.TokenPort;
+import org.latinflavor.identity.application.port.out.external.jwt.TokenSubject;
 import org.latinflavor.identity.config.properties.JwtProperties;
 import org.springframework.stereotype.Component;
 

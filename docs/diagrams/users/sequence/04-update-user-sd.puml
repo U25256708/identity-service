@@ -19,7 +19,7 @@ skinparam sequence {
 hide footbox
 autonumber
 
-actor "Usuario interno" as User
+actor "Administrador" as User
 participant "Pantalla de usuarios" as UI
 participant "API Identity" as API
 participant "Control de acceso" as Security
@@ -29,16 +29,16 @@ database "Base de datos" as DB
 User -> UI: Presiona «Editar información básica»
 UI -> User: Muestra formulario de edición
 User -> UI: Confirma cambios
-UI -> API: Envía cambios básicos\nPUT /identity-service/v1/users/me
+UI -> API: Envía cambios básicos y estado activo\nPUT /identity-service/v1/users/{id}
 activate API
-API -> Security: Verifica rol INTERNAL o ADMIN\ny UPDATE_OWN_USER, USER_MANAGEMENT\no ACCESS_MANAGEMENT
+API -> Security: Verifica rol ADMIN\ny UPDATE_USER, USER_MANAGEMENT\no ACCESS_MANAGEMENT
 Security --> API: Acceso autorizado
-API -> Users: Solicita actualizar al usuario autenticado
+API -> Users: Solicita actualizar al usuario indicado
 activate Users
 Users -> Users: Valida los datos recibidos
-Users -> DB: Busca al usuario autenticado con roles/permisos
+Users -> DB: Busca al usuario indicado con roles/permisos
 DB --> Users: Devuelve usuario encontrado
-Users -> Users: Aplica cambios de datos básicos
+Users -> Users: Aplica cambios de datos básicos\ny activa o desactiva la cuenta
 Users -> DB: Guarda información básica actualizada
 DB --> Users: Confirma actualización
 Users --> API: Actualización completada

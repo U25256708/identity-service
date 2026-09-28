@@ -7,6 +7,7 @@ public record UpdateUserRequest(
         @NotNull String paternalLastName,
         @NotNull String maternalLastName,
         @NotNull String phoneNumber,
-        @NotNull String dni
+        @NotNull String dni,
+        Boolean active
 ) {
 }

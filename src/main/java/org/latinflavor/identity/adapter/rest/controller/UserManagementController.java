@@ -7,15 +7,12 @@ import org.latinflavor.identity.adapter.rest.request.UpdateUserRequest;
 import org.latinflavor.identity.adapter.rest.request.UpdateInternalAccessRequest;
 import org.latinflavor.identity.adapter.rest.response.CreateUserResponse;
 import org.latinflavor.identity.adapter.rest.response.GetUserResponse;
-import org.latinflavor.identity.application.port.in.user.DeleteUserUseCase;
-import org.latinflavor.identity.application.port.in.user.GetUserUseCase;
-import org.latinflavor.identity.application.port.in.user.GetUsersUseCase;
-import org.latinflavor.identity.application.port.in.user.CreateUserUseCase;
-import org.latinflavor.identity.application.port.in.user.UpdateUserUseCase;
-import org.latinflavor.identity.application.port.in.user.UpdateInternalAccessUseCase;
-import org.latinflavor.identity.application.port.out.external.TokenSubject;
+import org.latinflavor.identity.application.command.SearchInternalUsersCriteria;
+import org.latinflavor.identity.application.port.in.user.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,10 +52,20 @@ public class UserManagementController {
                 .toList());
     }
 
-    @PutMapping("/me")
-    public ResponseEntity<Void> update(@AuthenticationPrincipal TokenSubject authenticatedUser,
+//    @GetMapping
+//    public ResponseEntity<Page<GetUserResponse>> searchInternalUsers(
+//            @RequestParam(required = false) String q,
+//            @RequestParam(required = false) List<String> filters,
+//            @PageableDefault(size = 20, sort = "username") Pageable pageable) {
+//        return ResponseEntity.ok(searchUsersUseCase
+//                .searchInternalUsers(new SearchInternalUsersCriteria(q, filters), pageable)
+//                .map(INSTANCE::toRetrievalResponse));
+//    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable UUID id,
                                        @Valid @RequestBody UpdateUserRequest request) {
-        updateUserUseCase.update(authenticatedUser.userId().toString(), INSTANCE.toCommand(request));
+        updateUserUseCase.update(id.toString(), INSTANCE.toCommand(request));
         return ResponseEntity.noContent().build();
     }
 

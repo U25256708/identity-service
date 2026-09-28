@@ -71,13 +71,12 @@ web:
           - MANAGE_USER_ACCESS
           - USER_MANAGEMENT
           - ACCESS_MANAGEMENT
-      - path: /identity-service/v1/users/me
+      - path: /identity-service/v1/users/*
         method: PUT
         roles:
-          - INTERNAL
           - ADMIN
         permissions:
-          - UPDATE_OWN_USER
+          - UPDATE_USER
           - USER_MANAGEMENT
           - ACCESS_MANAGEMENT
       - path: /identity-service/v1/users/*/disable
@@ -116,6 +115,9 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} : %msg%n"
 
 external:
+  services:
+    customer:
+      base-url: ${CUSTOMER_SERVICE_URL:http://localhost:8081}
   sendgrid:
     enabled: ${SENDGRID_ENABLED}
     api-key: ${SENDGRID_API_KEY}

@@ -1,6 +1,6 @@
 package org.latinflavor.identity.config;
 
-import org.latinflavor.identity.application.port.out.external.TokenSubject;
+import org.latinflavor.identity.application.port.out.external.jwt.TokenSubject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

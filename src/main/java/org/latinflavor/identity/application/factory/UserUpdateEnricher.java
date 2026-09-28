@@ -16,5 +16,9 @@ public class UserUpdateEnricher {
         if (command.paternalLastName() != null) user.setPaternalLastName(command.paternalLastName());
         if (command.maternalLastName() != null) user.setMaternalLastName(command.maternalLastName());
         if (command.phoneNumber() != null) user.setPhoneNumber(command.phoneNumber());
+        if (command.active() != null) {
+            if (command.active()) user.enable();
+            else user.disable();
+        }
     }
 }

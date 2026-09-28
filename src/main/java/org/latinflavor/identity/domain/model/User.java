@@ -133,4 +133,9 @@ public class User extends AbstractAuditable<UUID> {
         return this;
     }
 
+    public User enable() {
+        this.active = true;
+        return this;
+    }
+
 }

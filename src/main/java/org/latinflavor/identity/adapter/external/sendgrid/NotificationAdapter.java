@@ -1,7 +1,7 @@
 package org.latinflavor.identity.adapter.external.sendgrid;
 
 import lombok.RequiredArgsConstructor;
-import org.latinflavor.identity.application.port.out.external.NotificationPort;
+import org.latinflavor.identity.application.port.out.external.sendgrid.NotificationPort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
