@@ -1,0 +1,49 @@
+@startuml
+title Users - Búsqueda paginada de usuarios internos
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam backgroundColor #FFFFFF
+skinparam sequence {
+  ArrowColor #425466
+  LifeLineBorderColor #AAB7C4
+  LifeLineBackgroundColor #FFFFFF
+  ParticipantBorderColor #527C82
+  ParticipantBackgroundColor #E7F1F2
+  ParticipantFontColor #243746
+  ActorBorderColor #527C82
+  ActorBackgroundColor #E7F1F2
+  ActorFontColor #243746
+  ActivationBorderColor #D5AA3A
+  ActivationBackgroundColor #F8E7A1
+}
+hide footbox
+autonumber
+
+actor "Usuario autorizado" as User
+participant "Pantalla de usuarios" as UI
+participant "API Identity" as API
+participant "Control de acceso" as Security
+participant "Gestión de usuarios" as Users
+database "Base de datos" as DB
+
+User -> UI: Escribe el término de búsqueda
+UI -> User: Muestra los campos filtrables
+User -> UI: Selecciona filtros, tamaño de página y orden
+UI -> API: Solicita búsqueda paginada\nGET /identity-service/v1/users/search
+activate API
+API -> Security: Verifica rol ADMIN o INTERNAL\ny READ_USER, USER_MANAGEMENT\no ACCESS_MANAGEMENT
+Security --> API: Acceso autorizado
+API -> Users: Solicita usuarios internos filtrados,\nordenados y paginados
+activate Users
+Users -> Users: Valida page, size y campos de ordenamiento
+Users -> Users: Valida los filtros solicitados
+Users -> DB: Consulta usuarios INTERNAL que coincidan\ncon el orden y la página indicados
+DB --> Users: Devuelve la página de usuarios\ncon roles y permisos
+Users -> Users: Calcula el total de registros coincidentes
+Users --> API: Devuelve contenido y resumen de paginación
+deactivate Users
+API --> UI: 200 OK + PageResponse
+deactivate API
+UI --> User: Muestra la página de resultados\ny el resumen de paginación
+
+@enduml

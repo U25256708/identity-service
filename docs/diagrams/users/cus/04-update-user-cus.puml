@@ -1,0 +1,72 @@
+@startuml
+left to right direction
+
+title CUS04 - Actualización de información básica
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+
+skinparam actorStyle stickman
+
+skinparam usecase {
+    BackgroundColor #EAF4FF
+    BorderColor #B5D4F5
+    FontColor #333333
+    ArrowColor #555555
+}
+
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor white
+}
+
+actor "Administrador" as ADMIN
+
+rectangle {
+
+    usecase "Actualizar información\nbásica de usuario" as CUSUPDATE
+
+    usecase "Verificar rol y permisos\ndel administrador" as UC01
+
+    usecase "Validar datos\nde la solicitud" as UC02
+
+    usecase "Buscar usuario con\nroles y permisos" as UC03
+
+    usecase "Verificar que el usuario\nsea de tipo INTERNAL" as UC04
+
+    usecase "Aplicar cambios\nde datos básicos" as UC05
+
+    usecase "Activar o desactivar\nla cuenta" as UC06
+
+    usecase "Guardar la\nactualización" as UC07
+
+    usecase "Presentar resultado\nde la actualización" as UC08
+
+    usecase "Mostrar acceso\nno autorizado" as UC09
+
+    usecase "Mostrar solicitud\ninválida" as UC10
+
+    usecase "Mostrar usuario\nno encontrado" as UC11
+
+    usecase "Mostrar usuario\nno interno" as UC12
+
+}
+
+ADMIN --> CUSUPDATE
+
+CUSUPDATE ..> UC01 : <<include>>
+CUSUPDATE ..> UC02 : <<include>>
+CUSUPDATE ..> UC03 : <<include>>
+CUSUPDATE ..> UC04 : <<include>>
+CUSUPDATE ..> UC05 : <<include>>
+CUSUPDATE ..> UC07 : <<include>>
+CUSUPDATE ..> UC08 : <<include>>
+
+UC05 ..> UC06 : <<extend>>
+
+UC01 ..> UC09 : <<extend>>
+UC02 ..> UC10 : <<extend>>
+UC03 ..> UC11 : <<extend>>
+UC04 ..> UC12 : <<extend>>
+@enduml

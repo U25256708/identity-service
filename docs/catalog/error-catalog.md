@@ -12,7 +12,11 @@ Todos los endpoints incluyen el prefijo `/identity-service`.
 | El rol enviado no existe o está inactivo. | `POST /identity-service/v1/users` | 400 | `ROLE_NOT_FOUND` | `Role {role} was not found or is inactive` |
 | Algún permiso enviado no existe o está inactivo. | `POST /identity-service/v1/users` | 400 | `PERMISSION_NOT_FOUND` | `Permission {permission} was not found or is inactive` |
 | No existe un usuario con el UUID indicado. | `GET /identity-service/v1/users/{id}` | 404 | `USER_NOT_FOUND` | `User {id} was not found` |
-| Algún valor del parámetro `filters` no corresponde a ningún campo buscable. | `GET /identity-service/v1/users` | 400 | `UNSUPPORTED_USER_SEARCH_FILTER` | `Unsupported user search filter: {filter}` |
+| Algún valor del parámetro `filters` no corresponde a ningún campo buscable. | `GET /identity-service/v1/users/search` | 400 | `UNSUPPORTED_USER_SEARCH_FILTER` | `Unsupported user search filter: {filter}` |
+| El índice de página enviado es negativo. | `GET /identity-service/v1/users/search` | 400 | `INVALID_PAGE` | `Page index must be greater than or equal to zero` |
+| El tamaño de página enviado está fuera del rango de 1 a 100. | `GET /identity-service/v1/users/search` | 400 | `INVALID_PAGE_SIZE` | `Page size must be between 1 and 100` |
+| Algún valor del parámetro `sort` no sigue el formato `campo` o `campo,dirección`. | `GET /identity-service/v1/users/search` | 400 | `INVALID_SORT_FORMAT` | `Invalid sort format: {sort}. Expected 'field' or 'field,direction'` |
+| Algún campo del parámetro `sort` no es ordenable. | `GET /identity-service/v1/users/search` | 400 | `UNSUPPORTED_SORT_FIELD` | `Unsupported user sort field: {field}` |
 | No existe el usuario a actualizar. | `PUT /identity-service/v1/users/{id}` | 404 | `USER_NOT_FOUND` | `User {id} was not found` |
 | El usuario que se quiere actualizar no es de tipo `INTERNAL`. | `PUT /identity-service/v1/users/{id}` | 400 | `USER_NOT_INTERNAL` | `User {id} is not an internal user` |
 | No existe el usuario cuyo acceso se quiere modificar. | `PATCH /identity-service/v1/users/{id}/access` | 404 | `USER_NOT_FOUND` | `User {id} was not found` |
