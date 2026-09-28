@@ -1,0 +1,71 @@
+@startuml
+left to right direction
+
+title CUS10 - Búsqueda paginada de usuarios internos
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+
+skinparam actorStyle stickman
+
+skinparam usecase {
+    BackgroundColor #EAF4FF
+    BorderColor #B5D4F5
+    FontColor #333333
+    ArrowColor #555555
+}
+
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor white
+}
+
+actor "Usuario autorizado" as USER
+
+rectangle {
+
+    usecase "Buscar usuarios internos\ncon paginación" as CUSSEARCH
+
+    usecase "Verificar rol y permisos\ndel solicitante" as UC01
+
+    usecase "Validar los parámetros\nde paginación" as UC02
+
+    usecase "Validar los campos\nde ordenamiento" as UC03
+
+    usecase "Validar los criterios\nde búsqueda" as UC04
+
+    usecase "Consultar usuarios internos\nfiltrados, ordenados y paginados" as UC05
+
+    usecase "Calcular el total de\nregistros coincidentes" as UC06
+
+    usecase "Presentar la página de\nresultados con el resumen\nde paginación" as UC07
+
+    usecase "Mostrar acceso\nno autorizado" as UC08
+
+    usecase "Mostrar parámetros\nde paginación inválidos" as UC09
+
+    usecase "Mostrar campo de\nordenamiento no soportado" as UC10
+
+    usecase "Mostrar criterio de\nbúsqueda no soportado" as UC11
+
+    usecase "Mostrar listado\nsin resultados" as UC12
+
+}
+
+USER --> CUSSEARCH
+
+CUSSEARCH ..> UC01 : <<include>>
+CUSSEARCH ..> UC02 : <<include>>
+CUSSEARCH ..> UC03 : <<include>>
+CUSSEARCH ..> UC04 : <<include>>
+CUSSEARCH ..> UC05 : <<include>>
+CUSSEARCH ..> UC06 : <<include>>
+CUSSEARCH ..> UC07 : <<include>>
+
+UC01 ..> UC08 : <<extend>>
+UC02 ..> UC09 : <<extend>>
+UC03 ..> UC10 : <<extend>>
+UC04 ..> UC11 : <<extend>>
+UC07 ..> UC12 : <<extend>>
+@enduml

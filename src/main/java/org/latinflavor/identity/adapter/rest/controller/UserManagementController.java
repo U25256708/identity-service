@@ -9,9 +9,11 @@ import org.latinflavor.identity.adapter.rest.response.CreateUserResponse;
 import org.latinflavor.identity.adapter.rest.response.GetUserResponse;
 import org.latinflavor.identity.application.command.SearchInternalUsersCriteria;
 import org.latinflavor.identity.application.port.in.user.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.latinflavor.identity.domain.model.User;
+import org.latinflavor.identity.shared.pagination.PageResult;
+import org.latinflavor.identity.shared.pagination.PaginationRequest;
+import org.latinflavor.identity.shared.pagination.SortParser;
+import org.latinflavor.identity.shared.response.PageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,7 @@ public class UserManagementController {
 
     private final CreateUserUseCase createUserUseCase;
     private final GetUserUseCase getUserUseCase;
-    private final GetUsersUseCase getUsersUseCase;
+    private final SearchUsersCase searchUsersCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final UpdateInternalAccessUseCase updateInternalAccessUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
@@ -44,23 +46,26 @@ public class UserManagementController {
         return ResponseEntity.ok(INSTANCE.toRetrievalResponse(getUserUseCase.get(id.toString())));
     }
 
+    @Deprecated
     @GetMapping
     public ResponseEntity<List<GetUserResponse>> searchInternalUsers() {
-        return ResponseEntity.ok(getUsersUseCase.searchInternalUsers()
+        return ResponseEntity.ok(searchUsersCase.searchInternalUsers()
                 .stream()
                 .map(INSTANCE::toRetrievalResponse)
                 .toList());
     }
 
-//    @GetMapping
-//    public ResponseEntity<Page<GetUserResponse>> searchInternalUsers(
-//            @RequestParam(required = false) String q,
-//            @RequestParam(required = false) List<String> filters,
-//            @PageableDefault(size = 20, sort = "username") Pageable pageable) {
-//        return ResponseEntity.ok(searchUsersUseCase
-//                .searchInternalUsers(new SearchInternalUsersCriteria(q, filters), pageable)
-//                .map(INSTANCE::toRetrievalResponse));
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<PageResponse<GetUserResponse>> searchInternalUsersPaged(@RequestParam(required = false) String q,
+                                                                                  @RequestParam(required = false) List<String> filters,
+                                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                                  @RequestParam(defaultValue = "20") int size,
+                                                                                  @RequestParam(required = false) List<String> sort) {
+        PageResult<User> result = searchUsersCase.searchInternalUsers(new SearchInternalUsersCriteria(q, filters),
+                PaginationRequest.of(page, size, SortParser.parse(sort)));
+
+        return ResponseEntity.ok(PageResponse.from(result, INSTANCE::toRetrievalResponse));
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable UUID id,

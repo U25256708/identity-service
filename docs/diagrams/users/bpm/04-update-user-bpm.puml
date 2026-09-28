@@ -1,0 +1,127 @@
+@startuml
+title BPM 04 - Actualización de información básica
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ArrowColor black
+
+skinparam activity {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    DiamondBackgroundColor white
+    DiamondBorderColor black
+    StartColor black
+    EndColor black
+}
+
+|Administrador|
+
+start
+
+:Acceder a la pantalla
+de usuarios;
+
+:Seleccionar un usuario y
+presionar «Editar información
+básica»;
+
+:Modificar los datos básicos
+y el estado activo;
+
+:Confirmar cambios;
+
+|Sistema|
+
+:Recibir solicitud
+PUT /v1/users/{id};
+
+:Verificar rol ADMIN y
+permisos del solicitante;
+
+if (¿Acceso autorizado?) then (Sí)
+
+    :Validar los datos
+    de la solicitud;
+
+    if (¿Datos válidos?) then (Sí)
+
+        :Buscar el usuario
+        con roles y permisos;
+
+        if (¿Usuario existe?) then (Sí)
+
+            if (¿Usuario de tipo INTERNAL?) then (Sí)
+
+                :Aplicar cambios
+                de datos básicos;
+
+                if (¿Se desactiva la cuenta?) then (Sí)
+
+                    :Desactivar la cuenta e
+                    incrementar la versión
+                    del token;
+
+                else (No)
+
+                endif
+
+                :Guardar la
+                actualización;
+
+                |Administrador|
+
+                :Visualizar confirmación
+                de cambios;
+
+            else (No)
+
+                :Mostrar usuario
+                no interno;
+
+                |Administrador|
+
+                :Visualizar error
+                de usuario no interno;
+
+            endif
+
+        else (No)
+
+            :Mostrar usuario
+            no encontrado;
+
+            |Administrador|
+
+            :Visualizar error
+            de usuario inexistente;
+
+        endif
+
+    else (No)
+
+        :Mostrar solicitud
+        no válida;
+
+        |Administrador|
+
+        :Visualizar error
+        de solicitud inválida;
+
+    endif
+
+else (No)
+
+    :Mostrar acceso
+    no autorizado;
+
+    |Administrador|
+
+    :Visualizar error
+    de permisos;
+
+endif
+
+stop
+@enduml

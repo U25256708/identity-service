@@ -55,4 +55,8 @@ public class UserRepositoryAdapter implements UserPersistPort, UserSearchPort {
         repository.delete(entity);
     }
 
+    @Override
+    public Page<User> searchInternalUsers(Specification<User> specification, Pageable pageable) {
+        return repository.findAll(specification, pageable);
+    }
 }

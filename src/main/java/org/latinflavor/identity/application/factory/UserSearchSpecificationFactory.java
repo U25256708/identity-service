@@ -31,14 +31,15 @@ public class UserSearchSpecificationFactory {
             "employeeCode"
     );
 
-    public Specification<User> internalUsersMatching(SearchInternalUsersCriteria criteria) {
+    public Specification<User> withSpecification(SearchInternalUsersCriteria criteria) {
         return isInternal()
                 .and(matchesQuery(criteria))
                 .and(withAccessData());
     }
 
     private Specification<User> isInternal() {
-        return (root, query, builder) -> builder.equal(root.get("userType"), INTERNAL);
+        return (root, query, builder) ->
+                builder.equal(root.get("userType"), INTERNAL);
     }
 
     private Specification<User> withAccessData() {

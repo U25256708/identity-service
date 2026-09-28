@@ -20,7 +20,5 @@ public interface UserSearchPort {
 
     List<User> findAllInternalWithDetails();
 
-//    Page<User> searchInternalUsers(Specification<User> specification, Pageable pageable);
-
-
+    Page<User> searchInternalUsers(Specification<User> userSpecification, Pageable pageable);
 }
