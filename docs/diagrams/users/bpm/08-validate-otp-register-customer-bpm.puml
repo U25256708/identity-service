@@ -1,0 +1,39 @@
+@startuml
+title BPM 08 - Validación de OTP y registro de cliente
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ArrowColor black
+skinparam activity {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    DiamondBackgroundColor white
+    DiamondBorderColor black
+    StartColor black
+    EndColor black
+}
+
+|Cliente|
+start
+:Ingresar el código recibido;
+:Confirmar registro\ne inicio de sesión;
+|Sistema|
+:Validar el formato\ndel código;
+if (¿Formato válido?) then (Sí)
+    :Enviar solicitud de validación\ny registro;
+    if (¿Validación exitosa?) then (Sí)
+        :Guardar la sesión del cliente;
+        :Redirigir a la pantalla\nprincipal;
+    else (No)
+        :Mostrar el error informado;
+        :Permitir corregir el código\no solicitar uno nuevo;
+    endif
+else (No)
+    :Resaltar el campo del código\ny mostrar indicaciones;
+endif
+|Cliente|
+:Visualizar el resultado;
+stop
+@enduml

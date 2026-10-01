@@ -1,0 +1,48 @@
+@startuml
+left to right direction
+
+title CUS06 - Actualización de rol y permisos de usuario interno
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam usecase {
+    BackgroundColor #EAF4FF
+    BorderColor #B5D4F5
+    FontColor #333333
+    ArrowColor #555555
+}
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor white
+}
+
+actor "Administrador" as ADMIN
+
+rectangle {
+    usecase "Actualizar rol y permisos\nde usuario interno" as CUSACCESS
+    usecase "Verificar rol y permisos\ndel administrador" as UC01
+    usecase "Buscar usuario con\nsus asignaciones" as UC02
+    usecase "Verificar que el usuario\nsea de tipo INTERNAL" as UC03
+    usecase "Validar rol y permisos\nsolicitados" as UC04
+    usecase "Guardar rol y\npermisos asignados" as UC05
+    usecase "Presentar resultado\nde la actualización" as UC06
+    usecase "Mostrar acceso\nno autorizado" as UC07
+    usecase "Mostrar usuario\nno encontrado" as UC08
+    usecase "Mostrar usuario\nno interno" as UC09
+    usecase "Mostrar rol o permiso\nno válido" as UC10
+}
+
+ADMIN --> CUSACCESS
+CUSACCESS ..> UC01 : <<include>>
+CUSACCESS ..> UC02 : <<include>>
+CUSACCESS ..> UC03 : <<include>>
+CUSACCESS ..> UC04 : <<include>>
+CUSACCESS ..> UC05 : <<include>>
+CUSACCESS ..> UC06 : <<include>>
+UC01 ..> UC07 : <<extend>>
+UC02 ..> UC08 : <<extend>>
+UC03 ..> UC09 : <<extend>>
+UC04 ..> UC10 : <<extend>>
+@enduml

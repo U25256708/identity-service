@@ -1,0 +1,41 @@
+@startuml
+title BPM 05 - Desactivación de usuario
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ArrowColor black
+skinparam activity {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    DiamondBackgroundColor white
+    DiamondBorderColor black
+    StartColor black
+    EndColor black
+}
+
+|Administrador|
+start
+:Acceder a la pantalla\nde usuarios;
+:Seleccionar un usuario y\npresionar «Desactivar»;
+|Sistema|
+:Mostrar confirmación con\nlas consecuencias de la acción;
+|Administrador|
+if (¿Confirma la desactivación?) then (Sí)
+    |Sistema|
+    :Enviar solicitud\nde desactivación;
+    if (¿Desactivación exitosa?) then (Sí)
+        :Mostrar confirmación;
+        :Actualizar el estado del usuario\nen la pantalla;
+    else (No)
+        :Mostrar mensaje de error\ny opción para reintentar;
+    endif
+    |Administrador|
+    :Visualizar el resultado;
+else (No)
+    |Sistema|
+    :Cerrar la confirmación\nsin realizar cambios;
+endif
+stop
+@enduml

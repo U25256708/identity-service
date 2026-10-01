@@ -4,7 +4,7 @@ Todos los endpoints se documentan con el prefijo `/identity-service`.
 
 Fuentes de verdad:
 
-- Enums de error: `org.latinflavor.identity.domain.errors.UserErrors`, `OtpErrors` y `PaginationErrors`.
+- Enums de error: `org.latinflavor.identity.domain.errors.UserErrors`, `OtpErrors`, `CustomerErrors` y `PaginationErrors`.
 - Manejo global: `org.latinflavor.identity.config.GlobalExceptionHandlerConfig` y `ServerResponseAuthenticationEntryPoint`.
 - Validaciones de entrada: los records en `org.latinflavor.identity.adapter.rest.request` y el record anidado `GenerateOtpController.GenerateOtpRequest`.
 
@@ -35,6 +35,12 @@ Las plantillas de mensaje usan `%s`, que `ApplicationException` reemplaza con `S
 |---|---:|---|
 | `INVALID_OTP_CODE` | 400 | `Invalid OTP code` |
 | `EXPIRED_OTP_CODE` | 400 | `This OTP code has expired` |
+
+### `CustomerErrors`
+
+| Constante | HTTP | Plantilla de mensaje |
+|---|---:|---|
+| `CUSTOMER_REGISTRATION_FAILED` | 500 | `The customer could not be registered for email %s` |
 
 ### `PaginationErrors`
 
@@ -75,6 +81,7 @@ Las plantillas de mensaje usan `%s`, que `ApplicationException` reemplaza con `S
 | El OTP es válido, pero el usuario asociado está inactivo. Aplica también a un usuario ya existente. | `POST /identity-service/v1/sign-in` con tipo `OTP` | 400 | `USER_IS_NOT_ACTIVE` | `OneTimePasswordAuthenticationProvider#retrieveUser` |
 | Al registrar automáticamente al cliente no se encuentra activo el rol `BASIC`. | `POST /identity-service/v1/sign-in` con tipo `OTP` | 400 | `ROLE_NOT_FOUND` | `OneTimePasswordAuthenticationProvider#createUserIfNotExists` |
 | Al registrar automáticamente al cliente no se encuentra activo el permiso `BASIC_MANAGEMENT`. | `POST /identity-service/v1/sign-in` con tipo `OTP` | 400 | `PERMISSION_NOT_FOUND` | `OneTimePasswordAuthenticationProvider#createUserIfNotExists` |
+| El registro del cliente en `customer-service` falla o responde un estado fuera del rango 2xx. | `POST /identity-service/v1/sign-in` con tipo `OTP` | 500 | `CUSTOMER_REGISTRATION_FAILED` | `CustomerServiceAdapter#create` |
 
 `GET /identity-service/v1/users` (endpoint deprecado) y `POST /identity-service/v1/generate-code` no lanzan errores de negocio; solo pueden producir errores de validación o de integración.
 
@@ -213,3 +220,4 @@ Los errores de negocio, `INVALID_REQUEST`, `UNAUTHORIZED` e `INVALID_TOKEN` se s
 | 5 | `PUT` y `PATCH` se ejecutan dentro de una transacción, por lo que un error de `AuthorizationCatalog` revierte los cambios previos de la petición. En cambio los errores de paginación y `UNSUPPORTED_USER_SEARCH_FILTER` se lanzan antes de abrir transacción. |
 | 6 | `INVALID_CREDENTIALS` responde `401` con la estructura de `ServerResponse`, igual que `UNAUTHORIZED`. Un cliente no puede distinguirlos por el código HTTP, solo por `exceptionName`. |
 | 7 | `RoleName` y `PermissionCode` se validan contra el catálogo en memoria que arma `AuthorizationCatalogInitializer` al iniciar la aplicación. Si el inicializador no corre, `ROLE_NOT_FOUND` y `PERMISSION_NOT_FOUND` se devuelven para cualquier valor, incluso válido. |
+| 8 | `OneTimePasswordAuthenticationProvider#authenticate` es transaccional y, después de `markAsValidated`, llama a `customer-service` por HTTP. Si la llamada falla se lanza `CUSTOMER_REGISTRATION_FAILED` y la transacción revierte, de modo que el OTP sigue pendiente y el usuario puede reintentar el mismo código. El punto débil es el caso inverso: si `customer-service` responde bien y luego falla el commit, queda un cliente registrado sin usuario local, porque no hay compensación ni outbox. |

@@ -1,0 +1,52 @@
+@startuml
+left to right direction
+
+title CUS08 - Validación de OTP y registro de cliente
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam usecase {
+    BackgroundColor #EAF4FF
+    BorderColor #B5D4F5
+    FontColor #333333
+    ArrowColor #555555
+}
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor white
+}
+
+actor "Cliente" as CUSTOMER
+
+rectangle {
+    usecase "Validar OTP y\nregistrar cliente" as CUSREGISTER
+    usecase "Validar datos\nde autenticación" as UC01
+    usecase "Buscar último OTP\npendiente del correo" as UC02
+    usecase "Verificar código, vigencia\ne intentos permitidos" as UC03
+    usecase "Buscar cliente\npor email" as UC04
+    usecase "Registrar cliente con rol\ny permiso básicos" as UC05
+    usecase "Generar token\nde acceso JWT" as UC06
+    usecase "Marcar OTP\ncomo validado" as UC07
+    usecase "Presentar resultado\nde autenticación" as UC08
+    usecase "Mostrar solicitud\ninválida" as UC09
+    usecase "Mostrar código OTP\ninválido o expirado" as UC10
+    usecase "Mostrar cuenta\ninactiva" as UC11
+    usecase "Mostrar error de\nregistro del cliente" as UC12
+}
+
+CUSTOMER --> CUSREGISTER
+CUSREGISTER ..> UC01 : <<include>>
+CUSREGISTER ..> UC02 : <<include>>
+CUSREGISTER ..> UC03 : <<include>>
+CUSREGISTER ..> UC04 : <<include>>
+CUSREGISTER ..> UC06 : <<include>>
+CUSREGISTER ..> UC07 : <<include>>
+CUSREGISTER ..> UC08 : <<include>>
+UC04 ..> UC05 : <<extend>>
+UC01 ..> UC09 : <<extend>>
+UC03 ..> UC10 : <<extend>>
+UC04 ..> UC11 : <<extend>>
+UC05 ..> UC12 : <<extend>>
+@enduml

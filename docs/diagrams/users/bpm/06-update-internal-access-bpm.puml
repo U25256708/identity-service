@@ -1,0 +1,42 @@
+@startuml
+title BPM 06 - Actualización de rol y permisos de usuario interno
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ArrowColor black
+skinparam activity {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    DiamondBackgroundColor white
+    DiamondBorderColor black
+    StartColor black
+    EndColor black
+}
+
+|Administrador|
+start
+:Seleccionar un usuario interno;
+|Sistema|
+:Mostrar los roles y permisos\ndisponibles y asignados;
+|Administrador|
+:Seleccionar el nuevo rol\ny los permisos;
+:Confirmar cambios de acceso;
+|Sistema|
+:Validar la selección realizada;
+if (¿Selección válida?) then (Sí)
+    :Enviar solicitud\nde actualización de acceso;
+    if (¿Actualización exitosa?) then (Sí)
+        :Mostrar confirmación;
+        :Actualizar el rol y los permisos\nmostrados en pantalla;
+    else (No)
+        :Mostrar el error informado\ny conservar la selección;
+    endif
+else (No)
+    :Mostrar indicaciones sobre\nla selección inválida;
+endif
+|Administrador|
+:Visualizar el resultado;
+stop
+@enduml

@@ -362,8 +362,9 @@ Funcionalidades terminadas:
 Pendiente:
 
 - Suite de pruebas automatizadas: el proyecto declara las dependencias de test, pero aún no tiene casos.
-- El prefijo `/identity-service` aparece en las reglas de seguridad y en la documentación, pero los controllers declaran `@RequestMapping("/v1")`. Falta definir si lo agrega un gateway o si debe configurarse con `server.servlet.context-path`.
+- El prefijo `/identity-service` lo antepone `WebConfig` con `PathMatchConfigurer.addPathPrefix`, por lo que los controllers declaran `/v1` y las reglas de seguridad usan la ruta completa. No requiere `context-path`.
 - `springdoc-openapi` está permitido en las reglas de CORS y seguridad, pero no figura como dependencia, por lo que no hay interfaz de Swagger activa.
+- `UpdateUserRequest.dni` se valida y viaja en el comando, pero `UserUpdateEnricher` no lo aplica. La validación de unicidad de DNI en la creación está marcada para eliminarse.
 ---
 
 Proyecto académico del curso Integrador de Software I. Los microservicios de la suite LatinFlavor son `identity-service`, `customer-service` y `booking-service`.

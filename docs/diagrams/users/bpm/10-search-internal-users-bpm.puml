@@ -17,115 +17,39 @@ skinparam activity {
 }
 
 |Usuario autorizado|
-
 start
-
 :Acceder a la pantalla
 de usuarios;
-
 :Escribir el término de búsqueda
 y seleccionar los campos a filtrar;
-
 :Seleccionar el tamaño de página
 y el orden de los resultados;
-
 :Confirmar la búsqueda;
-
 |Sistema|
-
-:Recibir solicitud GET /v1/users/search
-con q, filters, page, size y sort;
-
-:Verificar rol y permisos
-del solicitante;
-
-if (¿Acceso autorizado?) then (Sí)
-
-    :Validar los parámetros
-    de paginación;
-
-    if (¿Página y tamaño válidos?) then (Sí)
-
-        :Validar los campos
-        de ordenamiento;
-
-        if (¿Campos ordenables?) then (Sí)
-
-            :Validar los criterios
-            de búsqueda;
-
-            if (¿Filtros soportados?) then (Sí)
-
-                :Consultar los usuarios internos
-                que coincidan, ordenados
-                y paginados;
-
-                if (¿Existen resultados?) then (Sí)
-
-                    :Calcular el total de
-                    registros coincidentes;
-
-                    |Usuario autorizado|
-
-                    :Mostrar la página de resultados
-                    con el resumen de paginación;
-
-                else (No)
-
-                    |Usuario autorizado|
-
-                    :Mostrar mensaje de
-                    resultados no encontrados;
-
-                endif
-
-            else (No)
-
-                :Mostrar criterio de
-                búsqueda no soportado;
-
-                |Usuario autorizado|
-
-                :Visualizar error
-                de filtro inválido;
-
-            endif
-
+:Validar los criterios,
+la página y el orden;
+if (¿Parámetros válidos?) then (Sí)
+    :Enviar solicitud
+de búsqueda;
+    :Mostrar indicador
+de carga;
+    if (¿Búsqueda exitosa?) then (Sí)
+        if (¿Existen resultados?) then (Sí)
+            :Mostrar la página de resultados
+con el resumen de paginación;
         else (No)
-
-            :Mostrar campo de
-            ordenamiento no soportado;
-
-            |Usuario autorizado|
-
-            :Visualizar error
-            de ordenamiento inválido;
-
+            :Mostrar estado vacío
+de resultados;
         endif
-
     else (No)
-
-        :Mostrar parámetros de
-        paginación inválidos;
-
-        |Usuario autorizado|
-
-        :Visualizar error
-        de paginación inválida;
-
+        :Mostrar mensaje de error
+y opción para reintentar;
     endif
-
 else (No)
-
-    :Mostrar acceso
-    no autorizado;
-
-    |Usuario autorizado|
-
-    :Visualizar error
-    de permisos;
-
+    :Mostrar indicaciones sobre
+los parámetros inválidos;
 endif
-
+|Usuario autorizado|
+:Visualizar el resultado;
 stop
 @enduml

@@ -1,0 +1,107 @@
+@startuml
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 45
+skinparam ranksep 60
+skinparam roundcorner 4
+skinparam wrapWidth 200
+skinparam maxMessageSize 70
+skinparam classAttributeFontSize 12
+skinparam classFontSize 13
+title LATIN FLAVOR | Diagrama de clases
+left to right direction
+
+enum "UserType" as UserType {
+  INTERNAL
+  CUSTOMER
+}
+
+enum "RoleName" as RoleName {
+  BASIC
+  INTERNAL
+  ADMIN
+}
+
+enum "PermissionCode" as PermissionCode {
+  CREATE_USER
+  READ_USER
+  UPDATE_USER
+  UPDATE_OWN_USER
+  DISABLE_USER
+  MANAGE_USER_ACCESS
+  ...
+}
+
+class "users" as User <<entity>> {
+  - id: UUID
+  - userType: UserType
+  - username: String
+  - passwordHash: String
+  - firstName: String
+  - paternalLastName: String
+  - maternalLastName: String
+  - email: String
+  - phoneNumber: String
+  - dni: String
+  - employeeCode: String
+  - active: Boolean
+  - lastLoginAt: Instant
+  - tokenVersion: Integer
+  --
+  + assignRole(role: Role)
+  + replaceRole(role: Role)
+  + applyPermissions(permissions: Set<Permission>)
+  + enable()
+  + disable()
+  + getRoleNames(): Set<String>
+  + getPermissionCodes(): Set<String>
+}
+
+class "roles" as Role <<entity>> {
+  - id: UUID
+  - name: RoleName
+  - description: String
+  - isActive: Boolean
+  --
+  + isActive(): boolean
+}
+
+class "permissions" as Permission <<entity>> {
+  - id: UUID
+  - code: PermissionCode
+  - isActive: Boolean
+  --
+  + isActive(): boolean
+}
+
+class "otp_credentials" as OtpCredentials <<entity>> {
+  - id: UUID
+  - email: String
+  - codeHash: String
+  - attempts: Integer
+  - validUntil: Instant
+  - validatedAt: Instant
+  - isValidated: Boolean
+  --
+  + isExpired(): boolean
+  + registerFailedAttempt()
+  + markAsValidated()
+}
+
+' --- Enums como atributos ---
+UserType ..> User
+RoleName ..> Role
+PermissionCode ..> Permission
+
+' --- Alineacion ---
+User -[hidden]-> OtpCredentials
+
+' --- Relaciones many-to-many (user_roles / user_permissions) ---
+User "1" -- "0..*" Role
+User "1" -- "0..*" Permission
+
+' otp_credentials NO depende de users: se enlaza solo por email,
+' sin FK, y se emite antes de que el usuario exista.
+
+@enduml

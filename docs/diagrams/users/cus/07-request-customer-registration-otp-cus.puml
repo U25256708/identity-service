@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+
+title CUS07 - Solicitud de OTP para registro
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam usecase {
+    BackgroundColor #EAF4FF
+    BorderColor #B5D4F5
+    FontColor #333333
+    ArrowColor #555555
+}
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor white
+}
+
+actor "Cliente" as CUSTOMER
+
+rectangle {
+    usecase "Solicitar OTP\npara registro" as CUSOTP
+    usecase "Validar correo\nelectrónico" as UC01
+    usecase "Generar código\nde 6 dígitos" as UC02
+    usecase "Proteger contenido\ndel código" as UC03
+    usecase "Guardar OTP pendiente\ncon vigencia" as UC04
+    usecase "Enviar código\npor correo" as UC05
+    usecase "Presentar resultado\nde la solicitud" as UC06
+    usecase "Mostrar correo\nno válido" as UC07
+    usecase "Mostrar error de\ngeneración o envío" as UC08
+}
+
+CUSTOMER --> CUSOTP
+CUSOTP ..> UC01 : <<include>>
+CUSOTP ..> UC02 : <<include>>
+CUSOTP ..> UC03 : <<include>>
+CUSOTP ..> UC04 : <<include>>
+CUSOTP ..> UC05 : <<include>>
+CUSOTP ..> UC06 : <<include>>
+UC01 ..> UC07 : <<extend>>
+UC05 ..> UC08 : <<extend>>
+@enduml

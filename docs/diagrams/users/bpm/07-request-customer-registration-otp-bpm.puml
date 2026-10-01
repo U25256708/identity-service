@@ -1,0 +1,40 @@
+@startuml
+title BPM 07 - Solicitud de OTP para registro
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ArrowColor black
+skinparam activity {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    DiamondBackgroundColor white
+    DiamondBorderColor black
+    StartColor black
+    EndColor black
+}
+
+|Cliente|
+start
+:Acceder a la pantalla\nde registro;
+|Sistema|
+:Mostrar formulario para\ningresar el correo;
+|Cliente|
+:Ingresar correo y\nsolicitar código;
+|Sistema|
+:Validar el correo ingresado;
+if (¿Correo válido?) then (Sí)
+    :Enviar solicitud\nde código OTP;
+    if (¿Solicitud exitosa?) then (Sí)
+        :Mostrar pantalla para\ningresar el código recibido;
+    else (No)
+        :Mostrar mensaje de error\ny opción para reintentar;
+    endif
+else (No)
+    :Resaltar el campo de correo\ny mostrar indicaciones;
+endif
+|Cliente|
+:Visualizar el resultado;
+stop
+@enduml

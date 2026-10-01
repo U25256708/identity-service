@@ -1,0 +1,34 @@
+@startuml
+title BPM 03 - Consulta de usuario por ID
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ArrowColor black
+skinparam activity {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    DiamondBackgroundColor white
+    DiamondBorderColor black
+    StartColor black
+    EndColor black
+}
+
+|Usuario autorizado|
+start
+:Acceder a la pantalla\nde usuarios;
+:Seleccionar un usuario;
+|Sistema|
+:Mostrar indicador\nde carga;
+:Solicitar el detalle\ndel usuario seleccionado;
+if (¿Consulta exitosa?) then (Sí)
+    :Mostrar información, roles\ny permisos del usuario;
+else (No)
+    :Mostrar mensaje de error;
+    :Ofrecer volver al listado\no reintentar la consulta;
+endif
+|Usuario autorizado|
+:Visualizar el resultado;
+stop
+@enduml
