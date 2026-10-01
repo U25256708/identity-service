@@ -1,0 +1,38 @@
+@startuml
+left to right direction
+
+title CUS03 - Consulta de usuario por ID
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam usecase {
+    BackgroundColor #EAF4FF
+    BorderColor #B5D4F5
+    FontColor #333333
+    ArrowColor #555555
+}
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor white
+}
+
+actor "Usuario autorizado" as USER
+
+rectangle {
+    usecase "Consultar usuario\npor ID" as CUSGET
+    usecase "Verificar rol y permisos\ndel solicitante" as UC01
+    usecase "Buscar usuario con\nroles y permisos" as UC02
+    usecase "Presentar detalle\ndel usuario" as UC03
+    usecase "Mostrar acceso\nno autorizado" as UC04
+    usecase "Mostrar usuario\nno encontrado" as UC05
+}
+
+USER --> CUSGET
+CUSGET ..> UC01 : <<include>>
+CUSGET ..> UC02 : <<include>>
+CUSGET ..> UC03 : <<include>>
+UC01 ..> UC04 : <<extend>>
+UC02 ..> UC05 : <<extend>>
+@enduml

@@ -1,11 +1,10 @@
 @startuml
-title BPM 04 - Actualización de información básica
+title BPM 01 - Registro de usuario
 
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam shadowing false
 skinparam ArrowColor black
-
 skinparam activity {
     BackgroundColor white
     BorderColor black
@@ -18,22 +17,25 @@ skinparam activity {
 
 |Administrador|
 start
-:Seleccionar un usuario;
-:Presionar «Editar información\nbásica»;
+:Acceder a la pantalla\nde usuarios;
 |Sistema|
-:Mostrar formulario con\nlos datos actuales;
+:Mostrar el listado y la opción\n«Crear usuario»;
 |Administrador|
-:Modificar los datos básicos\ny el estado activo;
-:Confirmar cambios;
+:Seleccionar «Crear usuario»;
+|Sistema|
+:Mostrar formulario\nde registro;
+|Administrador|
+:Completar los datos\ndel usuario;
+:Confirmar registro;
 |Sistema|
 :Validar los datos ingresados;
 if (¿Datos válidos?) then (Sí)
-    :Enviar solicitud\nde actualización;
-    if (¿Actualización exitosa?) then (Sí)
-        :Mostrar confirmación\nde cambios;
-        :Actualizar la información\nmostrada;
+    :Enviar solicitud\nde registro;
+    if (¿Registro exitoso?) then (Sí)
+        :Mostrar confirmación\ndel registro;
+        :Actualizar el listado\nde usuarios;
     else (No)
-        :Mostrar el error informado\ny conservar los cambios ingresados;
+        :Mostrar el error informado\ny conservar los datos ingresados;
     endif
 else (No)
     :Resaltar los campos inválidos\ny mostrar indicaciones;

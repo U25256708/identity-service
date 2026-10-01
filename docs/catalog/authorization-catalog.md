@@ -104,7 +104,7 @@ Ningún rol tiene permisos asociados por defecto en la base de datos. Los permis
 
 | # | Observación |
 |---|---|
-| 1 | El prefijo `/identity-service` aparece en las reglas de seguridad y en la documentación, pero los controllers declaran `@RequestMapping("/v1")` y no existe `server.servlet.context-path` ni `spring.mvc.servlet.path` en `application.yaml`. Si el prefijo no lo agrega un gateway, los patrones no coinciden con las rutas reales y `anyRequest().denyAll()` termina bloqueando todo. |
+| 1 | El prefijo `/identity-service` lo agrega `WebConfig#configurePathMatch` mediante `HandlerTypePredicate.forBasePackage("org.latinflavor.identity")` a todo controller del paquete raíz, y se declara en `APIConstants.API_PATH_PREFIX`. No se usa `server.servlet.context-path`. Los controllers declaran `@RequestMapping("/v1")` y el prefijo se antepone en tiempo de ejecución, por lo que las rutas de las reglas de seguridad y las de los controllers coinciden. |
 | 2 | `SecurityConfig#authorityManager` combina rol y permiso con AND, pero dentro de cada lista usa `anyMatch`. Un usuario con rol `ADMIN` y permiso `BASIC_MANAGEMENT` no pasa ninguna regla de `/v1/users` salvo que además posea uno de los tres permisos `USER_MANAGEMENT`, `ACCESS_MANAGEMENT` o el permiso específico de la operación. |
 | 3 | `USER_MANAGEMENT` y `ACCESS_MANAGEMENT` actúan como permisos comodín en las cinco reglas de escritura y lectura, por lo que un permiso específico como `READ_USER` no aporta restricción adicional frente a ellos. |
 | 4 | No existe una tabla de relación entre roles y permisos, solo `user_roles` y `user_permissions`. Un permiso no se hereda de forma automática por tener un rol. |

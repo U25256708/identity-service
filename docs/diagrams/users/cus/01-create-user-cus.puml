@@ -1,0 +1,46 @@
+@startuml
+left to right direction
+
+title CUS01 - Registro de usuario
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam usecase {
+    BackgroundColor #EAF4FF
+    BorderColor #B5D4F5
+    FontColor #333333
+    ArrowColor #555555
+}
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor white
+}
+
+actor "Administrador" as ADMIN
+
+rectangle {
+    usecase "Registrar usuario" as CUSCREATE
+    usecase "Verificar rol y permisos\ndel administrador" as UC01
+    usecase "Validar datos\nde la solicitud" as UC02
+    usecase "Verificar email, username\ny DNI duplicados" as UC03
+    usecase "Preparar usuario y\nproteger contraseña" as UC04
+    usecase "Guardar usuario,\nrol y permisos" as UC05
+    usecase "Presentar resultado\ndel registro" as UC06
+    usecase "Mostrar acceso\nno autorizado" as UC07
+    usecase "Mostrar solicitud\ninválida" as UC08
+    usecase "Mostrar datos\nduplicados" as UC09
+}
+
+ADMIN --> CUSCREATE
+CUSCREATE ..> UC01 : <<include>>
+CUSCREATE ..> UC02 : <<include>>
+CUSCREATE ..> UC03 : <<include>>
+CUSCREATE ..> UC04 : <<include>>
+CUSCREATE ..> UC05 : <<include>>
+CUSCREATE ..> UC06 : <<include>>
+UC01 ..> UC07 : <<extend>>
+UC02 ..> UC08 : <<extend>>
+UC03 ..> UC09 : <<extend>>
+@enduml

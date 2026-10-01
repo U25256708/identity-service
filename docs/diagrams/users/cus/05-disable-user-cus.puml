@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+
+title CUS05 - Desactivación de usuario
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam usecase {
+    BackgroundColor #EAF4FF
+    BorderColor #B5D4F5
+    FontColor #333333
+    ArrowColor #555555
+}
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor white
+}
+
+actor "Administrador" as ADMIN
+
+rectangle {
+    usecase "Desactivar usuario" as CUSDISABLE
+    usecase "Verificar rol y permisos\ndel administrador" as UC01
+    usecase "Buscar usuario\npor ID" as UC02
+    usecase "Marcar cuenta inactiva" as UC03
+    usecase "Incrementar versión\ndel token" as UC04
+    usecase "Guardar estado y\nversión del token" as UC05
+    usecase "Presentar resultado\nde la desactivación" as UC06
+    usecase "Mostrar acceso\nno autorizado" as UC07
+    usecase "Mostrar usuario\nno encontrado" as UC08
+}
+
+ADMIN --> CUSDISABLE
+CUSDISABLE ..> UC01 : <<include>>
+CUSDISABLE ..> UC02 : <<include>>
+CUSDISABLE ..> UC03 : <<include>>
+CUSDISABLE ..> UC04 : <<include>>
+CUSDISABLE ..> UC05 : <<include>>
+CUSDISABLE ..> UC06 : <<include>>
+UC01 ..> UC07 : <<extend>>
+UC02 ..> UC08 : <<extend>>
+@enduml
